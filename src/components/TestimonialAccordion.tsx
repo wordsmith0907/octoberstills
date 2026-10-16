@@ -40,22 +40,14 @@ export function TestimonialAccordion({
   // Mobile active index (0-based)
   const [mobileIndex, setMobileIndex] = useState(2);
 
-  // Interaction and pause states
+  // Interaction and pause states (manual pause button in header)
   const [isManuallyPaused, setIsManuallyPaused] = useState(false);
   const isManuallyPausedRef = useRef(false);
 
-  const [isHovered, setIsHovered] = useState(false);
-  const isHoveredRef = useRef(false);
-
-  const [isFocused, setIsFocused] = useState(false);
-  const isFocusedRef = useRef(false);
-
   const isInViewRef = useRef(true);
-  const prefersReducedMotionRef = useRef(false);
 
-  // Authoritative timer tracking
+  // Authoritative timer tracking (milliseconds accumulated towards 6000ms rotation)
   const accumulatedTimeRef = useRef<number>(0);
-  const pauseUntilRef = useRef<number>(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
@@ -88,26 +80,6 @@ export function TestimonialAccordion({
     if (mobileVideoRef.current) {
       mobileVideoRef.current.play().catch(() => {});
     }
-  }, []);
-
-  // Check prefers-reduced-motion
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    prefersReducedMotionRef.current = mq.matches;
-    if (mq.matches) {
-      setIsManuallyPaused(true);
-      isManuallyPausedRef.current = true;
-    }
-    const handler = (e: MediaQueryListEvent) => {
-      prefersReducedMotionRef.current = e.matches;
-      if (e.matches) {
-        setIsManuallyPaused(true);
-        isManuallyPausedRef.current = true;
-      }
-    };
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
   }, []);
 
   // Viewport IntersectionObserver
@@ -200,7 +172,7 @@ export function TestimonialAccordion({
     }, 750);
   }, [testimonials.length]);
 
-  // Authoritative rotation timer: high-resolution timestamp delta accumulation
+  // Authoritative rotation timer: continuous 6000ms circular sequence
   useEffect(() => {
     let lastTime = Date.now();
     const interval = setInterval(() => {
@@ -208,13 +180,9 @@ export function TestimonialAccordion({
       const delta = now - lastTime;
       lastTime = now;
 
+      // Only pause if the browser tab itself is hidden in the background or user clicked Pause
       if (typeof document !== "undefined" && document.hidden) return;
-      if (isManuallyPausedRef.current || prefersReducedMotionRef.current) return;
-      if (isHoveredRef.current || isFocusedRef.current) return;
-      if (!isInViewRef.current) return;
-
-      // Check 10-second inactivity cooldown after manual clicks
-      if (now < pauseUntilRef.current) return;
+      if (isManuallyPausedRef.current) return;
 
       accumulatedTimeRef.current += delta;
       if (accumulatedTimeRef.current >= 6000) {
@@ -240,7 +208,6 @@ export function TestimonialAccordion({
       const next = !prev;
       isManuallyPausedRef.current = next;
       if (!next) {
-        pauseUntilRef.current = 0;
         syncPlayback();
       }
       return next;
@@ -250,8 +217,7 @@ export function TestimonialAccordion({
   // User click on desktop card: rearrange so clicked card occupies the 3rd position (index 2)
   const handleCardClick = (clickedIndex: number) => {
     if (clickedIndex === 2) {
-      // Already in the expanded center position
-      pauseUntilRef.current = Date.now() + 10000;
+      // Already in the expanded center position - reset timer so user gets full 6s
       accumulatedTimeRef.current = 0;
       syncPlayback();
       return;
@@ -281,8 +247,7 @@ export function TestimonialAccordion({
     const newMobIdx = testimonials.findIndex((t) => t.id === newCenterId);
     if (newMobIdx !== -1) setMobileIndex(newMobIdx);
 
-    // 10-second inactivity pause
-    pauseUntilRef.current = Date.now() + 10000;
+    // Reset 6-second timer
     accumulatedTimeRef.current = 0;
 
     setTimeout(() => {
@@ -291,7 +256,6 @@ export function TestimonialAccordion({
       if (
         incomingCenter &&
         videoRefs.current[incomingCenter.id] &&
-        isInViewRef.current &&
         !document.hidden
       ) {
         videoRefs.current[incomingCenter.id]?.play().catch(() => {});
@@ -316,19 +280,16 @@ export function TestimonialAccordion({
   // Mobile navigation handlers
   const handleMobilePrev = () => {
     setMobileIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
-    pauseUntilRef.current = Date.now() + 10000;
     accumulatedTimeRef.current = 0;
   };
 
   const handleMobileNext = () => {
     setMobileIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
-    pauseUntilRef.current = Date.now() + 10000;
     accumulatedTimeRef.current = 0;
   };
 
   const handleMobileDotClick = (idx: number) => {
     setMobileIndex(idx);
-    pauseUntilRef.current = Date.now() + 10000;
     accumulatedTimeRef.current = 0;
   };
 
@@ -415,24 +376,6 @@ export function TestimonialAccordion({
           className="hidden md:flex gap-3 lg:gap-3.5 h-[420px] lg:h-[450px] w-full items-center select-none relative"
           role="tablist"
           aria-label="Client testimonials accordion"
-          onMouseEnter={() => {
-            isHoveredRef.current = true;
-            setIsHovered(true);
-          }}
-          onMouseLeave={() => {
-            isHoveredRef.current = false;
-            setIsHovered(false);
-          }}
-          onFocusCapture={() => {
-            isFocusedRef.current = true;
-            setIsFocused(true);
-          }}
-          onBlurCapture={(e) => {
-            if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
-              isFocusedRef.current = false;
-              setIsFocused(false);
-            }
-          }}
         >
           {/* Left-edge exiting card dissolution to prevent cross-screen flying */}
           <AnimatePresence>
