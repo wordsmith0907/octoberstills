@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from "react";
-import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { TESTIMONIALS_DATA, type TestimonialItem } from "../data/testimonials";
 
 interface TestimonialAccordionProps {
@@ -163,11 +163,10 @@ export function TestimonialAccordion({
 
                         {item.verifiedLink && (
                           <span
-                            className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wider text-[#D5B99C]/80 group-hover:text-[#F3EADF] transition-colors shrink-0"
+                            className="inline-flex items-center text-[10px] uppercase tracking-wider text-[#D5B99C]/80 group-hover:text-[#F3EADF] transition-colors shrink-0"
                             title="View project in Selected Work"
                           >
                             <span className="hidden lg:inline text-[9px]">Featured Work</span>
-                            <ArrowUpRight className="w-3.5 h-3.5" />
                           </span>
                         )}
                       </div>
@@ -275,10 +274,10 @@ export function TestimonialAccordion({
                 {activeItem.verifiedLink && (
                   <a
                     href={activeItem.verifiedLink}
-                    className="p-2 rounded-full border border-[#F3EADF]/20 text-[#D5B99C] hover:text-[#F3EADF] hover:bg-white/5 transition-colors"
+                    className="px-3 py-1.5 rounded-full border border-[#F3EADF]/20 text-[#D5B99C] hover:text-[#F3EADF] hover:bg-white/5 transition-colors text-[10px] uppercase tracking-wider font-medium"
                     aria-label={`View ${activeItem.brand} work`}
                   >
-                    <ArrowUpRight className="w-4 h-4" />
+                    Featured Work
                   </a>
                 )}
               </div>

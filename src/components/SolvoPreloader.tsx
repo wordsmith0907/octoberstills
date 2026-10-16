@@ -382,17 +382,6 @@ export const SolvoPreloader: React.FC<SolvoPreloaderProps> = ({
               }}
             >
               <span>SKIP INTRO</span>
-              <span
-                aria-hidden="true"
-                className="solvo-skip-arrow"
-                style={{
-                  fontSize: "0.85em",
-                  transition: "transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
-                  display: "inline-block",
-                }}
-              >
-                ↗
-              </span>
             </button>
           )}
 

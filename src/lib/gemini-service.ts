@@ -191,7 +191,7 @@ export function getDeterministicReply(
   ) {
     return {
       reply: `You can reach Chaitya directly at ${OCTOBERSTILLS_KNOWLEDGE.contact.verifiedEmail}, connect via Instagram (@octoberstills), or share a project brief right here.`,
-      actions: ["Submit a Project Brief", "View Selected Work", "Instagram ↗"],
+      actions: ["Submit a Project Brief", "View Selected Work", "Instagram"],
     };
   }
 

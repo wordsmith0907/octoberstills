@@ -3,7 +3,6 @@ import {
   X,
   Send,
   RotateCcw,
-  ArrowUpRight,
   Sparkles,
   Plus,
   Trash2,
@@ -721,12 +720,9 @@ export function ChatbotPanel({
               key={idx}
               type="button"
               onClick={() => handleSend(action)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide bg-white/90 border border-[#30231D]/15 text-[#30231D] hover:bg-[#30231D] hover:text-[#F3EADF] transition-colors cursor-pointer"
+              className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide bg-white/90 border border-[#30231D]/15 text-[#30231D] hover:bg-[#30231D] hover:text-[#F3EADF] transition-colors cursor-pointer"
             >
-              <span>{action}</span>
-              {action.includes("↗") || action.includes("Work") ? (
-                <ArrowUpRight className="w-2.5 h-2.5 opacity-60" />
-              ) : null}
+              <span>{action.replace(/\s*↗/g, "")}</span>
             </button>
           ))}
         </div>

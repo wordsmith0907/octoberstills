@@ -103,19 +103,17 @@ export function Footer() {
                     href="https://www.instagram.com/octoberstills/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#F3EADF]/80 hover:text-[#B9784E] transition-colors flex items-center gap-1.5"
+                    className="text-[#F3EADF]/80 hover:text-[#B9784E] transition-colors"
                   >
                     <span>Instagram</span>
-                    <span className="text-[11px]">↗</span>
                   </a>
                 </li>
                 <li>
                   <a
                     href="mailto:octoberstills@gmail.com"
-                    className="text-[#F3EADF]/80 hover:text-[#B9784E] transition-colors flex items-center gap-1.5"
+                    className="text-[#F3EADF]/80 hover:text-[#B9784E] transition-colors"
                   >
                     <span>Email Studio</span>
-                    <span className="text-[11px]">↗</span>
                   </a>
                 </li>
               </ul>

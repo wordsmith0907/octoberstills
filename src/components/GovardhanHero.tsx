@@ -390,7 +390,7 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
                 Stories Told Through Light &amp; Feeling
               </h5>
 
-              {/* CTA: LET'S CREATE ↗ with high-contrast text and border */}
+              {/* CTA: LET'S CREATE with high-contrast text and border */}
               <button
                 type="button"
                 onClick={() => setConnectOpen(true)}
@@ -406,14 +406,12 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
                   textDecoration: "none",
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "6px",
                   letterSpacing: "0.16em",
                 }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
               >
                 <span>LET&apos;S CREATE</span>
-                <span style={{ fontSize: "1.1em", lineHeight: 1 }}>↗</span>
               </button>
             </motion.div>
           </div>

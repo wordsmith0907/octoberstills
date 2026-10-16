@@ -126,7 +126,7 @@ export function ContactSection() {
                     href="mailto:octoberstills@gmail.com"
                     className="text-[13px] uppercase tracking-[0.18em] text-[#D5B99C] hover:underline"
                   >
-                    Direct Email: octoberstills@gmail.com ↗
+                    Direct Email: octoberstills@gmail.com
                   </a>
                 </div>
               </motion.div>
@@ -267,7 +267,6 @@ export function ContactSection() {
                     style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
                   >
                     <span>{isSubmitting ? "Sending..." : "Send an Inquiry"}</span>
-                    <span>↗</span>
                   </button>
 
                   <div className="text-[12px] text-[#F3EADF]/60 tracking-[0.1em]">
@@ -331,7 +330,7 @@ export function ContactSection() {
                   rel="noopener noreferrer"
                   className="hover:text-[#D5B99C] transition-colors"
                 >
-                  @octoberstills ↗
+                  @octoberstills
                 </a>
               </div>
 
