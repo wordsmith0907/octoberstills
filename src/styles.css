@@ -484,7 +484,9 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding-top: clamp(24px, 3vh, 40px);
+  padding-top: clamp(24px, 3vh, 38px);
+  padding-bottom: clamp(16px, 2.2vh, 28px);
+  box-sizing: border-box;
 }
 
 .sw-header {
@@ -493,7 +495,7 @@
   align-items: center;
   text-align: center;
   padding: 0 clamp(24px, 5vw, 64px);
-  margin-bottom: clamp(20px, 2.5vh, 32px);
+  margin-bottom: clamp(12px, 1.6vh, 20px);
   flex-shrink: 0;
   width: 100%;
 }
@@ -543,13 +545,13 @@
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
   width: auto;
 }
 
 .sw-card-media {
   position: relative;
-  height: clamp(380px, 52vh, 500px);
+  height: clamp(280px, min(48vh, calc((100vw - 120px) * 0.34)), 510px);
   aspect-ratio: 4 / 5;
   width: auto;
   border-radius: 14px;
