@@ -89,45 +89,47 @@ export function CreativeDisciplines() {
                 delay: idx * 0.1,
                 ease: [0.25, 0.46, 0.45, 0.94],
               }}
-              className="group flex flex-col cursor-pointer"
+              className="h-full"
             >
-              {/* Large Portrait Photograph / Video Window (Strict 4:5 ratio, curved matching Selected Work) */}
-              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[14px] bg-[#30231D]/10">
-                {discipline.mediaType === "image" ? (
-                  <img
-                    src={discipline.mediaSrc}
-                    alt={discipline.title}
-                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] motion-reduce:transform-none"
-                    loading="lazy"
-                  />
-                ) : (
-                  <video
-                    src={discipline.mediaSrc}
-                    poster={discipline.poster}
-                    muted
-                    loop
-                    playsInline
-                    autoPlay
-                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] motion-reduce:transform-none"
-                  />
-                )}
-              </div>
+              <div className="discipline-card group flex flex-col cursor-pointer h-full">
+                {/* Large Portrait Photograph / Video Window (Strict 4:5 ratio, curved matching Selected Work) */}
+                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[14px] bg-[#30231D]/10">
+                  {discipline.mediaType === "image" ? (
+                    <img
+                      src={discipline.mediaSrc}
+                      alt={discipline.title}
+                      className="discipline-card-media w-full h-full object-cover motion-reduce:transform-none"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <video
+                      src={discipline.mediaSrc}
+                      poster={discipline.poster}
+                      muted
+                      loop
+                      playsInline
+                      autoPlay
+                      className="discipline-card-media w-full h-full object-cover motion-reduce:transform-none"
+                    />
+                  )}
+                </div>
 
-              {/* Number and Title beneath Photograph */}
-              <div className="pt-4 md:pt-5 flex items-baseline gap-3">
-                <span
-                  className="text-[12px] md:text-[13px] font-medium tracking-[0.22em] text-[#30231D]/60 group-hover:text-[#B9784E] transition-colors duration-300 select-none"
-                  style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
-                >
-                  {discipline.number}
-                </span>
-                <span className="text-[#30231D]/25 font-light select-none">/</span>
-                <h3
-                  className="text-[clamp(1.4rem,2vw,1.9rem)] font-light text-[#30231D] tracking-tight leading-tight group-hover:text-[#B9784E] transition-colors duration-300"
-                  style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
-                >
-                  {discipline.title}
-                </h3>
+                {/* Number and Title beneath Photograph */}
+                <div className="pt-4 md:pt-5 flex items-baseline gap-3">
+                  <span
+                    className="text-[12px] md:text-[13px] font-medium tracking-[0.22em] text-[#30231D]/60 group-hover:text-[#B9784E] transition-colors duration-300 select-none"
+                    style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
+                  >
+                    {discipline.number}
+                  </span>
+                  <span className="text-[#30231D]/25 font-light select-none">/</span>
+                  <h3
+                    className="text-[clamp(1.4rem,2vw,1.9rem)] font-light text-[#30231D] tracking-tight leading-tight group-hover:text-[#B9784E] transition-colors duration-300"
+                    style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                  >
+                    {discipline.title}
+                  </h3>
+                </div>
               </div>
             </motion.div>
           ))}
