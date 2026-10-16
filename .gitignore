@@ -48,3 +48,6 @@ SaveInta.com_*.mp4
 scratch/
 scripts/
 data/
+
+.vercel
+.env*
