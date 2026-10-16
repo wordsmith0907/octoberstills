@@ -13,6 +13,8 @@ export interface TestimonialItem {
   brand: string;
   discipline: string;
   image: string;
+  video: string;
+  poster: string;
   imageAlt: string;
   imagePosition?: string;
   verifiedLink?: string;
@@ -28,6 +30,8 @@ export const TESTIMONIALS_DATA: TestimonialItem[] = [
     brand: "The Misnomer",
     discipline: "Editorial Fashion & Still Life",
     image: "/ringview/0.jpg",
+    video: "/hero-videos/hero-6.mp4",
+    poster: "/ringview/0.jpg",
     imageAlt: "Tailored linen suit and editorial styling for The Misnomer campaign",
     imagePosition: "center 20%",
     verifiedLink: "#work",
@@ -41,6 +45,8 @@ export const TESTIMONIALS_DATA: TestimonialItem[] = [
     brand: "Botnia",
     discipline: "Organic Botanicals & Rituals",
     image: "/ringview/2.jpg",
+    video: "/ringview/1.mp4",
+    poster: "/ringview/2.jpg",
     imageAlt: "Sensory skincare ritual and morning light portrait for Botnia",
     imagePosition: "center 25%",
     verifiedLink: "#work",
@@ -54,6 +60,8 @@ export const TESTIMONIALS_DATA: TestimonialItem[] = [
     brand: "Theater",
     discipline: "Noir Footwear & Accessories",
     image: "/ringview/6.jpg",
+    video: "/selected-work/sw-2.mp4",
+    poster: "/selected-work/sw-2-poster.jpg",
     imageAlt: "Sculptural sunglasses and noir accessory styling for Theater",
     imagePosition: "center 20%",
     verifiedLink: "#work",
@@ -67,6 +75,8 @@ export const TESTIMONIALS_DATA: TestimonialItem[] = [
     brand: "Lenskart",
     discipline: "Contemporary Eyewear & Lifestyle",
     image: "/ringview/4.jpg",
+    video: "/ringview/7.mp4",
+    poster: "/ringview/4.jpg",
     imageAlt: "Architectural burgundy sunglasses campaign for Lenskart",
     imagePosition: "center 15%",
     verifiedLink: "#work",
@@ -80,6 +90,8 @@ export const TESTIMONIALS_DATA: TestimonialItem[] = [
     brand: "Raffles Udaipur",
     discipline: "Luxury Hospitality & Architecture",
     image: "/selected-work/sw-1-poster.jpg",
+    video: "/selected-work/sw-1.mp4",
+    poster: "/selected-work/sw-1-poster.jpg",
     imageAlt: "Sanctuary on the water at dusk, Lake Pichola architecture for Raffles Udaipur",
     imagePosition: "center center",
     verifiedLink: "#work",

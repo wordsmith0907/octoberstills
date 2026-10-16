@@ -12,28 +12,31 @@ export function TestimonialAccordion({
 }: TestimonialAccordionProps) {
   // Ordered sequence of testimonial items
   // Initial order: [1, 2, 3, 4, 5] -> circular rotation: [2, 3, 4, 5, 1], etc.
+  // The 3rd visual card (index 2) is ALWAYS the expanded card.
   const [items, setItems] = useState<TestimonialItem[]>(testimonials);
   const itemsRef = useRef<TestimonialItem[]>(testimonials);
   useEffect(() => {
     itemsRef.current = items;
   }, [items]);
 
-  // The 4th visual position (0-based index 3) is expanded by default
-  const [expandedIndex, setExpandedIndex] = useState(3);
-
-  // Track the ID of the wrapped card and total wrap cycles to ensure fresh mounting at the right slot
+  // Track wrapping card IDs to ensure smooth position transitions without cross-flying
   const [wrappedCardId, setWrappedCardId] = useState<string | null>(null);
   const [wrapCount, setWrapCount] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Exiting card at index 0 for smooth dissolution without flying across
+  // Leftmost exiting card clone for seamless left-edge dissolution
   const [exitingCard, setExitingCard] = useState<{
     item: TestimonialItem;
     width: number;
     height: number;
   } | null>(null);
 
-  // Mobile active index
-  const [mobileIndex, setMobileIndex] = useState(3);
+  // Video element references
+  const videoRefs = useRef<{ [key: string]: HTMLVideoElement | null }>({});
+  const mobileVideoRef = useRef<HTMLVideoElement | null>(null);
+
+  // Mobile active index (0-based)
+  const [mobileIndex, setMobileIndex] = useState(2);
 
   // Interaction and pause states
   const [isManuallyPaused, setIsManuallyPaused] = useState(false);
@@ -48,13 +51,42 @@ export function TestimonialAccordion({
   const isInViewRef = useRef(true);
   const prefersReducedMotionRef = useRef(false);
 
-  // Timer accumulation and cooldown refs
+  // Authoritative timer tracking
   const accumulatedTimeRef = useRef<number>(0);
   const pauseUntilRef = useRef<number>(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const touchStartX = useRef<number | null>(null);
+
+  // Synchronize video playback: ONLY the expanded center card (index 2) plays
+  const syncPlayback = useCallback(() => {
+    if (typeof document !== "undefined" && document.hidden) {
+      Object.values(videoRefs.current).forEach((v) => v?.pause());
+      if (mobileVideoRef.current) mobileVideoRef.current.pause();
+      return;
+    }
+
+    if (!isInViewRef.current) {
+      Object.values(videoRefs.current).forEach((v) => v?.pause());
+      if (mobileVideoRef.current) mobileVideoRef.current.pause();
+      return;
+    }
+
+    const currentCenter = itemsRef.current[2];
+    Object.entries(videoRefs.current).forEach(([id, vid]) => {
+      if (!vid) return;
+      if (currentCenter && id === currentCenter.id) {
+        vid.play().catch(() => {});
+      } else {
+        vid.pause();
+      }
+    });
+
+    if (mobileVideoRef.current) {
+      mobileVideoRef.current.play().catch(() => {});
+    }
+  }, []);
 
   // Check prefers-reduced-motion
   useEffect(() => {
@@ -76,26 +108,49 @@ export function TestimonialAccordion({
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  // IntersectionObserver to pause when scrolled out of view
+  // Viewport IntersectionObserver
   useEffect(() => {
     if (!sectionRef.current) return;
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        isInViewRef.current = entry.isIntersecting;
+        const visible = entry.isIntersecting;
+        isInViewRef.current = visible;
+        if (visible) {
+          syncPlayback();
+        } else {
+          Object.values(videoRefs.current).forEach((v) => v?.pause());
+          if (mobileVideoRef.current) mobileVideoRef.current.pause();
+        }
       },
-      { threshold: 0.1 }
+      { threshold: 0.05, rootMargin: "100px 0px" }
     );
     observer.observe(sectionRef.current);
     return () => observer.disconnect();
-  }, []);
+  }, [syncPlayback]);
 
-  // Rotate circularly to the next sequence
+  // Tab visibility change
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.hidden) {
+        Object.values(videoRefs.current).forEach((v) => v?.pause());
+        if (mobileVideoRef.current) mobileVideoRef.current.pause();
+      } else {
+        if (isInViewRef.current) {
+          syncPlayback();
+        }
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, [syncPlayback]);
+
+  // Rotate circularly to the next sequence: [1, 2, 3, 4, 5] -> [2, 3, 4, 5, 1]
   const rotateNext = useCallback(() => {
     const currentItems = itemsRef.current;
     if (!currentItems || currentItems.length === 0) return;
 
-    // Measure first card dimensions for smooth left-side exit overlay
+    // Capture first card bounding box for smooth left-edge dissolution
     if (containerRef.current) {
       const firstChild = containerRef.current.querySelector('button[role="tab"]') as HTMLElement;
       if (firstChild) {
@@ -108,6 +163,14 @@ export function TestimonialAccordion({
       }
     }
 
+    // Pause outgoing center video before moving
+    const outgoingCenter = currentItems[2];
+    if (outgoingCenter && videoRefs.current[outgoingCenter.id]) {
+      videoRefs.current[outgoingCenter.id]?.pause();
+    }
+
+    setIsTransitioning(true);
+
     const exiting = currentItems[0];
     setWrappedCardId(exiting.id);
     setWrapCount((c) => c + 1);
@@ -116,40 +179,42 @@ export function TestimonialAccordion({
     itemsRef.current = nextItems;
     setItems(nextItems);
 
-    // The 4th visual position (index 3) automatically expands
-    setExpandedIndex(3);
-
-    // Synchronize mobile view to match
+    // Synchronize mobile active index
     setMobileIndex((prev) => (prev + 1) % testimonials.length);
     accumulatedTimeRef.current = 0;
+
+    // After 750ms layout transition finishes, play the incoming center video
+    setTimeout(() => {
+      setIsTransitioning(false);
+      const incomingCenter = nextItems[2];
+      if (
+        incomingCenter &&
+        videoRefs.current[incomingCenter.id] &&
+        isInViewRef.current &&
+        !document.hidden
+      ) {
+        videoRefs.current[incomingCenter.id]?.play().catch(() => {});
+      }
+    }, 750);
   }, [testimonials.length]);
 
-  // Main timer loop: steady 200ms tick that accumulates active time without tearing down on re-renders
+  // Authoritative rotation timer: high-resolution timestamp delta accumulation
   useEffect(() => {
+    let lastTime = Date.now();
     const interval = setInterval(() => {
-      // Check document visibility
-      if (typeof document !== "undefined" && document.hidden) {
-        // hidden
-        return;
-      }
+      const now = Date.now();
+      const delta = now - lastTime;
+      lastTime = now;
 
-      // Check user preference or manual pause
+      if (typeof document !== "undefined" && document.hidden) return;
       if (isManuallyPausedRef.current || prefersReducedMotionRef.current) return;
-
-      // Check hover or keyboard focus
       if (isHoveredRef.current || isFocusedRef.current) return;
-
-      // Check viewport visibility
       if (!isInViewRef.current) return;
 
-      // Check 10-second interaction cooldown
-      const now = Date.now();
+      // Check 10-second inactivity cooldown after manual clicks
       if (now < pauseUntilRef.current) return;
 
-      // Accumulate active time
-      accumulatedTimeRef.current += 200;
-
-      // Check 6-second rotation interval
+      accumulatedTimeRef.current += delta;
       if (accumulatedTimeRef.current >= 6000) {
         accumulatedTimeRef.current = 0;
         rotateNext();
@@ -159,20 +224,77 @@ export function TestimonialAccordion({
     return () => clearInterval(interval);
   }, [rotateNext]);
 
+  // Initial playback start once mounted
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      syncPlayback();
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [syncPlayback]);
+
   // Toggle play/pause manually from section header
   const togglePlayPause = () => {
     setIsManuallyPaused((prev) => {
       const next = !prev;
       isManuallyPausedRef.current = next;
+      if (!next) {
+        pauseUntilRef.current = 0;
+        syncPlayback();
+      }
       return next;
     });
   };
 
-  // User click on desktop card: expand in place without reordering, pause for 10 seconds
-  const handleCardClick = (index: number) => {
-    setExpandedIndex(index);
+  // User click on desktop card: rearrange so clicked card occupies the 3rd position (index 2)
+  const handleCardClick = (clickedIndex: number) => {
+    if (clickedIndex === 2) {
+      // Already in the expanded center position
+      pauseUntilRef.current = Date.now() + 10000;
+      accumulatedTimeRef.current = 0;
+      syncPlayback();
+      return;
+    }
+
+    const currentItems = itemsRef.current;
+    const outgoingCenter = currentItems[2];
+    if (outgoingCenter && videoRefs.current[outgoingCenter.id]) {
+      videoRefs.current[outgoingCenter.id]?.pause();
+    }
+
+    setIsTransitioning(true);
+
+    // Calculate shift to place clicked card at visual index 2
+    const shift = (clickedIndex - 2 + currentItems.length) % currentItems.length;
+    const nextItems = [...currentItems.slice(shift), ...currentItems.slice(0, shift)];
+
+    const wrappedItems = currentItems.slice(0, shift);
+    setWrappedCardId(wrappedItems[wrappedItems.length - 1]?.id || null);
+    setWrapCount((c) => c + 1);
+
+    itemsRef.current = nextItems;
+    setItems(nextItems);
+
+    // Sync mobile active index
+    const newCenterId = nextItems[2]?.id;
+    const newMobIdx = testimonials.findIndex((t) => t.id === newCenterId);
+    if (newMobIdx !== -1) setMobileIndex(newMobIdx);
+
+    // 10-second inactivity pause
     pauseUntilRef.current = Date.now() + 10000;
     accumulatedTimeRef.current = 0;
+
+    setTimeout(() => {
+      setIsTransitioning(false);
+      const incomingCenter = nextItems[2];
+      if (
+        incomingCenter &&
+        videoRefs.current[incomingCenter.id] &&
+        isInViewRef.current &&
+        !document.hidden
+      ) {
+        videoRefs.current[incomingCenter.id]?.play().catch(() => {});
+      }
+    }, 750);
   };
 
   // Keyboard navigation
@@ -182,16 +304,14 @@ export function TestimonialAccordion({
       handleCardClick(index);
     } else if (e.key === "ArrowRight") {
       e.preventDefault();
-      const nextIdx = (expandedIndex + 1) % items.length;
-      handleCardClick(nextIdx);
+      handleCardClick(3);
     } else if (e.key === "ArrowLeft") {
       e.preventDefault();
-      const prevIdx = (expandedIndex === 0 ? items.length - 1 : expandedIndex - 1);
-      handleCardClick(prevIdx);
+      handleCardClick(1);
     }
   };
 
-  // Mobile navigation handlers (pause for 10 seconds on interaction)
+  // Mobile navigation handlers
   const handleMobilePrev = () => {
     setMobileIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
     pauseUntilRef.current = Date.now() + 10000;
@@ -225,7 +345,6 @@ export function TestimonialAccordion({
     touchStartX.current = null;
   };
 
-  // Current active item for mobile view
   const mobileActiveItem = testimonials[mobileIndex] || testimonials[0];
 
   return (
@@ -235,24 +354,6 @@ export function TestimonialAccordion({
       className="relative w-full pt-32 pb-20 sm:pt-36 sm:pb-28 md:py-36 px-6 sm:px-12 md:px-16 lg:px-24 overflow-hidden text-[#30231D]"
       style={{ backgroundColor: "#F3EADF" }}
       aria-label="Client Testimonials and Endorsements"
-      onMouseEnter={() => {
-        isHoveredRef.current = true;
-        setIsHovered(true);
-      }}
-      onMouseLeave={() => {
-        isHoveredRef.current = false;
-        setIsHovered(false);
-      }}
-      onFocusCapture={() => {
-        isFocusedRef.current = true;
-        setIsFocused(true);
-      }}
-      onBlurCapture={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
-          isFocusedRef.current = false;
-          setIsFocused(false);
-        }
-      }}
     >
       <div className="max-w-7xl mx-auto space-y-12 md:space-y-16">
         {/* Section Header */}
@@ -312,16 +413,34 @@ export function TestimonialAccordion({
           className="hidden md:flex gap-3 lg:gap-3.5 h-[420px] lg:h-[450px] w-full items-stretch select-none relative"
           role="tablist"
           aria-label="Client testimonials accordion"
+          onMouseEnter={() => {
+            isHoveredRef.current = true;
+            setIsHovered(true);
+          }}
+          onMouseLeave={() => {
+            isHoveredRef.current = false;
+            setIsHovered(false);
+          }}
+          onFocusCapture={() => {
+            isFocusedRef.current = true;
+            setIsFocused(true);
+          }}
+          onBlurCapture={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+              isFocusedRef.current = false;
+              setIsFocused(false);
+            }
+          }}
         >
-          {/* Smooth left-side exit overlay for wrapped card to prevent crossing */}
+          {/* Left-edge exiting card dissolution to prevent cross-screen flying */}
           <AnimatePresence>
             {exitingCard && (
               <motion.div
                 key={`exit-${exitingCard.item.id}`}
                 initial={{ opacity: 1, x: 0 }}
-                animate={{ opacity: 0, x: -60 }}
+                animate={{ opacity: 0, x: -45 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
+                transition={{ duration: 0.65, ease: [0.25, 1, 0.5, 1] }}
                 onAnimationComplete={() => setExitingCard(null)}
                 className="absolute left-0 top-0 rounded-2xl overflow-hidden border border-[#30231D]/15 bg-[#251b16] pointer-events-none z-10"
                 style={{
@@ -329,9 +448,11 @@ export function TestimonialAccordion({
                   height: exitingCard.height,
                 }}
               >
-                <img
-                  src={exitingCard.item.image}
-                  alt={exitingCard.item.imageAlt}
+                <video
+                  src={exitingCard.item.video}
+                  poster={exitingCard.item.poster || exitingCard.item.image}
+                  muted
+                  playsInline
                   className="w-full h-full object-cover object-center opacity-85"
                   style={{ objectPosition: exitingCard.item.imagePosition || "center center" }}
                 />
@@ -352,7 +473,8 @@ export function TestimonialAccordion({
           </AnimatePresence>
 
           {items.map((item, index) => {
-            const isExpanded = expandedIndex === index;
+            // Visual position 3 (index === 2) is ALWAYS expanded
+            const isExpanded = index === 2;
             const isWrapped = item.id === wrappedCardId;
             const cardKey = isWrapped ? `${item.id}-wrap-${wrapCount}` : item.id;
 
@@ -360,10 +482,10 @@ export function TestimonialAccordion({
               <motion.button
                 key={cardKey}
                 layout={!isWrapped ? "position" : false}
-                initial={isWrapped ? { opacity: 0, x: 35 } : false}
+                initial={isWrapped ? { opacity: 0, x: 30 } : false}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{
-                  duration: 0.7,
+                  duration: 0.75,
                   ease: [0.25, 1, 0.5, 1],
                 }}
                 type="button"
@@ -387,7 +509,7 @@ export function TestimonialAccordion({
                 }}
               >
                 {isExpanded ? (
-                  /* Expanded Card: Left Text Area (56%) + Right Portrait Image (44%) */
+                  /* Expanded Card: Left Editorial Pull Quote Area (56%) + Right Video (44%) */
                   <div
                     id={`testimonial-panel-${item.id}`}
                     className="flex h-full w-full overflow-hidden"
@@ -437,26 +559,37 @@ export function TestimonialAccordion({
                       </div>
                     </div>
 
-                    {/* Right Portrait Image */}
+                    {/* Right Video Area */}
                     <div className="w-[44%] h-full relative overflow-hidden bg-[#201713] shrink-0">
-                      <img
-                        src={item.image}
-                        alt={item.imageAlt}
+                      <video
+                        ref={(el) => {
+                          videoRefs.current[item.id] = el;
+                        }}
+                        src={item.video}
+                        poster={item.poster || item.image}
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
                         className="w-full h-full object-cover object-center select-none transition-transform duration-700 ease-out group-hover:scale-105"
                         style={{ objectPosition: item.imagePosition || "center center" }}
-                        loading="lazy"
                       />
                     </div>
                   </div>
                 ) : (
-                  /* Collapsed Card: Narrow vertical image panel with subtle vertical label (No serial numbers) */
+                  /* Collapsed Card: Full-bleed vertical video panel with subtle vertical label (No serial numbers) */
                   <div className="relative h-full w-full overflow-hidden bg-[#201713]">
-                    <img
-                      src={item.image}
-                      alt={item.imageAlt}
-                      className="w-full h-full object-cover object-center select-none transition-transform duration-700 ease-out group-hover:scale-105 opacity-85 group-hover:opacity-100"
+                    <video
+                      ref={(el) => {
+                        videoRefs.current[item.id] = el;
+                      }}
+                      src={item.video}
+                      poster={item.poster || item.image}
+                      muted
+                      playsInline
+                      preload="metadata"
+                      className="w-full h-full object-cover object-center select-none transition-transform duration-700 ease-out opacity-85 group-hover:opacity-100 group-hover:scale-105"
                       style={{ objectPosition: item.imagePosition || "center center" }}
-                      loading="lazy"
                     />
 
                     {/* Subtle bottom gradient to ensure text readability */}
@@ -487,13 +620,20 @@ export function TestimonialAccordion({
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Card Presentation (No serial numbers badge) */}
+          {/* Card Presentation */}
           <div className="relative rounded-2xl overflow-hidden bg-[#30231D] text-[#F3EADF] border border-[#30231D]/15 shadow-md flex flex-col">
-            {/* Top Portrait Image */}
+            {/* Top Portrait Video */}
             <div className="h-64 sm:h-72 w-full relative overflow-hidden bg-[#201713]">
-              <img
-                src={mobileActiveItem.image}
-                alt={mobileActiveItem.imageAlt}
+              <video
+                ref={mobileVideoRef}
+                key={`mobile-vid-${mobileActiveItem.id}`}
+                src={mobileActiveItem.video}
+                poster={mobileActiveItem.poster || mobileActiveItem.image}
+                muted
+                loop
+                playsInline
+                autoPlay
+                preload="metadata"
                 className="w-full h-full object-cover object-center"
                 style={{ objectPosition: mobileActiveItem.imagePosition || "center center" }}
               />
