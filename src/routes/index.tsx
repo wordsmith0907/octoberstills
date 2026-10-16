@@ -9,6 +9,7 @@ import { SelectedStories } from "../components/SelectedStories";
 import { CreativeDisciplines } from "../components/CreativeDisciplines";
 import { BehindTheLens } from "../components/BehindTheLens";
 import { TestimonialAccordion } from "../components/TestimonialAccordion";
+import { OctoberJournal } from "../components/OctoberJournal";
 import { ContactSection } from "../components/ContactSection";
 import { Footer } from "../components/Footer";
 import { StudioAssistant } from "../components/Chatbot/StudioAssistant";
@@ -81,7 +82,10 @@ function HomePage() {
       {/* 9. Testimonial Accordion / Stories, through their eyes — Section 08 */}
       <TestimonialAccordion />
 
-      {/* 10. Let's Create Together / Contact Finale — Section 09 */}
+      {/* 9b. The October Journal / Social Diary — Section 09 */}
+      <OctoberJournal />
+
+      {/* 10. Let's Create Together / Contact Finale — Section 10 */}
       <ContactSection />
 
       {/* 11. Minimal Editorial Footer — Section 10 */}

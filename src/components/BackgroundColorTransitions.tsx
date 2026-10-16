@@ -92,6 +92,7 @@ export function BackgroundColorTransitions() {
     const disciplines = document.getElementById("services");
     const about = document.getElementById("about");
     const testimonials = document.getElementById("testimonials");
+    const journal = document.getElementById("journal");
     const contact = document.getElementById("contact");
     const footer = document.getElementById("footer");
     const pageContainer = document.getElementById("page-container");
@@ -107,6 +108,7 @@ export function BackgroundColorTransitions() {
     if (disciplines) disciplines.style.backgroundColor = "#30231D";
     if (about) about.style.backgroundColor = "#D5B99C";
     if (testimonials) testimonials.style.backgroundColor = "#F3EADF";
+    if (journal) journal.style.backgroundColor = "#F3EADF";
     if (contact) contact.style.backgroundColor = "#F3EADF";
     if (footer) footer.style.backgroundColor = "#F3EADF";
 
@@ -115,6 +117,7 @@ export function BackgroundColorTransitions() {
       const sections = [
         { el: document.getElementById("footer"), color: "#30231D" },
         { el: document.getElementById("contact"), color: "#30231D" },
+        { el: document.getElementById("journal"), color: "#F3EADF" },
         { el: document.getElementById("testimonials"), color: "#F3EADF" },
         { el: document.getElementById("about"), color: "#F3EADF" },
         { el: document.getElementById("services"), color: "#D5B99C" },
@@ -167,13 +170,14 @@ export function BackgroundColorTransitions() {
             Boolean
           ) as HTMLElement[],
       },
-      // Transition 4: Behind the Lens & Testimonials (Warm Ivory) -> Contact & Footer (Deep Espresso)
+      // Transition 4: Behind the Lens, Testimonials & The October Journal (Warm Ivory) -> Contact & Footer (Deep Espresso)
       {
         getTrigger: () => contact,
         fromColor: "#F3EADF",
         toColor: "#30231D",
         getTargets: () =>
           [
+            journal,
             contact,
             footer,
             pageContainer,

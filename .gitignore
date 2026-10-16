@@ -47,7 +47,7 @@ solvo_*.js
 SaveInta.com_*.mp4
 scratch/
 scripts/
-data/
+/data/
 
 .vercel
 .env*
