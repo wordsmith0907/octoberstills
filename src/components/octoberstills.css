@@ -1,0 +1,1001 @@
+/* ===========================================================================
+   OCTOBERSTILLS — Phase 1 Component Styles
+   Design System: Warm, nostalgic, feminine editorial
+   
+   Colors:
+     Espresso:     #30231D (Primary dark)
+     Warm Ivory:   #F3EADF (Primary light)
+     Burnt Sienna: #B9784E (Interactive accent)
+     Muted Sage:   #8C9275 (Secondary accent)
+     Soft Sand:    #D5B99C (Neutral)
+   
+   Typography:
+     Serif:      Cormorant Garamond
+     Sans-serif: DM Sans
+   =========================================================================== */
+
+:root {
+  --color-espresso: #30231D;
+  --color-warm-ivory: #F3EADF;
+  --color-burnt-sienna: #B9784E;
+  --color-muted-sage: #8C9275;
+  --color-soft-sand: #D5B99C;
+  --hero-dark: #30231D;
+  --hero-light: #F3EADF;
+  --hero-border: rgba(48, 35, 29, 0.25);
+}
+
+/* ===========================================================================
+   1. PRELOADER
+   Inspired by Solvo Loader — scattered image burst + character reveal
+   =========================================================================== */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: all;
+}
+
+.preloader-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--color-espresso);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.preloader-images {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preloader-image {
+  position: absolute;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+  will-change: transform, opacity;
+  left: 50%;
+  top: 50%;
+  margin-left: -90px;
+  margin-top: -120px;
+}
+
+.preloader-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+.preloader-text {
+  position: relative;
+  z-index: 20;
+  text-align: center;
+  pointer-events: none;
+}
+
+.preloader-name {
+  font-family: "Cormorant Garamond", "Libre Baskerville", Georgia, serif;
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  color: #FFFFFF;
+  mix-blend-mode: difference;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.02em;
+  perspective: 600px;
+}
+
+.preloader-letter {
+  display: inline-block;
+  will-change: transform, opacity;
+  transform-origin: center bottom;
+}
+
+/* Solvo Preloader — Skip Intro Button */
+.solvo-skip-btn:hover {
+  background: rgba(243, 234, 223, 0.16) !important;
+  border-color: #B9784E !important;
+  color: #B9784E !important;
+}
+
+.solvo-skip-btn:hover .solvo-skip-arrow {
+  transform: translate(2px, -2px) !important;
+}
+
+.solvo-skip-btn:focus-visible {
+  outline: 2px solid #B9784E !important;
+  outline-offset: 3px !important;
+  border-color: #B9784E !important;
+}
+
+/* ===========================================================================
+   2. ADAPTIVE HEADER
+   Inspired by Ritesh Photos — auto-adapting contrast navigation
+   =========================================================================== */
+.adaptive-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10005;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px clamp(24px, 5vw, 56px);
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  mix-blend-mode: difference;
+  color: #FFFFFF !important;
+  pointer-events: none;
+  transition: padding 0.3s ease;
+}
+
+.header-wordmark,
+.header-nav-link,
+.header-mobile-toggle {
+  pointer-events: auto;
+  color: #FFFFFF !important;
+  mix-blend-mode: difference;
+}
+
+.header-wordmark {
+  font-family: "Cormorant Garamond", "Libre Baskerville", Georgia, serif;
+  font-size: clamp(1.1rem, 1.4vw, 1.35rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #FFFFFF !important;
+  font-variant-ligatures: common-ligatures discretionary-ligatures;
+  transition: opacity 0.2s ease;
+}
+
+.header-wordmark:hover {
+  opacity: 0.7;
+}
+
+.header-nav-desktop {
+  display: flex;
+  gap: clamp(24px, 3.5vw, 44px);
+}
+
+.header-nav-link {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #FFFFFF !important;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.header-nav-link:hover {
+  opacity: 0.6;
+}
+
+/* Mobile hamburger */
+.header-mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  z-index: 110;
+}
+
+.hamburger-line {
+  display: block;
+  width: 24px;
+  height: 1.5px;
+  background-color: #FFFFFF !important;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.adaptive-header.mobile-menu-active .hamburger-line,
+.adaptive-header.mobile-menu-active .header-wordmark {
+  color: #F3EADF !important;
+  background-color: #F3EADF !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .adaptive-header,
+  .header-wordmark,
+  .header-nav-link,
+  .hamburger-line {
+    transition: none !important;
+  }
+}
+
+.hamburger-line.open:first-child {
+  transform: translateY(3.75px) rotate(45deg);
+}
+
+.hamburger-line.open:last-child {
+  transform: translateY(-3.75px) rotate(-45deg);
+}
+
+/* Mobile nav overlay */
+.mobile-nav-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  background: #30231D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.mobile-nav-overlay.mobile-nav-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-nav-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.mobile-nav-link {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 2rem;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  color: #F3EADF;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.mobile-nav-link:hover {
+  opacity: 1;
+}
+
+@media (max-width: 767px) {
+  .header-nav-desktop {
+    display: none;
+  }
+
+  .header-mobile-toggle {
+    display: flex;
+  }
+}
+
+/* ===========================================================================
+   3. INTERACTIVE HERO
+   Inspired by Govardhan Art — scattered images with cursor parallax
+   =========================================================================== */
+.interactive-hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: #F3EADF;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-images-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero-scattered-image {
+  position: absolute;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(48, 35, 29, 0.15);
+  will-change: transform;
+  visibility: visible;
+  opacity: 0; /* GSAP will animate this in */
+}
+
+.hero-scattered-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero-center-text {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 0 24px;
+  pointer-events: none;
+}
+
+.hero-tagline {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: #B9784E;
+  margin: 0 0 20px 0;
+}
+
+.hero-dynamic-title {
+  font-family: "Cormorant Garamond", "Instrument Serif", Georgia, serif;
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: #30231D;
+  margin: 0;
+  will-change: transform, opacity;
+}
+
+.hero-dynamic-sub {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: clamp(0.875rem, 1.2vw, 1.0625rem);
+  font-weight: 300;
+  line-height: 1.6;
+  color: #8C9275;
+  margin: 16px 0 0 0;
+  will-change: transform, opacity;
+}
+
+/* Responsive hero images */
+@media (max-width: 1024px) {
+  .hero-scattered-image {
+    transform: scale(0.75) !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-scattered-image {
+    transform: scale(0.5) !important;
+  }
+
+  .hero-dynamic-title {
+    font-size: clamp(2.25rem, 10vw, 3.5rem);
+  }
+}
+
+/* ===========================================================================
+   4. TRUSTED BRANDS COLLABORATION SECTION
+   Luxury editorial layout:
+   - Top heading: "TRUSTED BY 50+ BRANDS" (DM Sans, medium, Espresso)
+   - Middle: Seamless right-to-left monochrome Espresso logo marquee
+   - Bottom text: "and many more..." (Cormorant Garamond italic, muted Espresso)
+   =========================================================================== */
+.brand-collaborations-section {
+  width: 100%;
+  padding: clamp(48px, 6vw, 68px) 0 clamp(40px, 5vw, 56px) 0;
+  background-color: #F3EADF;
+  overflow: hidden;
+  position: relative;
+  border: none;
+}
+
+/* Top heading */
+.brand-collab-heading-wrapper {
+  text-align: center;
+  margin-bottom: clamp(28px, 3.5vw, 40px);
+  padding: 0 20px;
+}
+
+.brand-collab-heading {
+  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  font-size: clamp(0.6875rem, 0.85vw, 0.8125rem);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #30231D;
+  margin: 0;
+}
+
+/* Middle marquee container */
+.brand-collab-marquee-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  /* Subtle edge fade */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 7%,
+    black 93%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 7%,
+    black 93%,
+    transparent 100%
+  );
+}
+
+.brand-collab-track {
+  display: flex;
+  width: max-content;
+  animation: brand-scroll-left 34s linear infinite;
+  will-change: transform;
+}
+
+.brand-collab-marquee-container:hover .brand-collab-track {
+  animation-play-state: paused;
+}
+
+.brand-collab-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(48px, 5.5vw, 84px);
+  padding-right: clamp(48px, 5.5vw, 84px);
+  flex-shrink: 0;
+}
+
+.brand-collab-logo-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  flex-shrink: 0;
+  cursor: pointer;
+  outline: none;
+  border-radius: 4px;
+  transition: outline-color 250ms ease;
+}
+
+.brand-collab-logo-item:focus-visible {
+  outline: 2px solid rgba(48, 35, 29, 0.4);
+  outline-offset: 4px;
+}
+
+.brand-collab-img {
+  height: var(--brand-height-desktop, 22px);
+  max-height: var(--brand-height-desktop, 22px);
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  display: block;
+  /* Default monochrome Deep Espresso (#30231D) preserving brand shapes */
+  filter: brightness(0) saturate(100%) invert(13%) sepia(19%) saturate(830%) hue-rotate(338deg) brightness(94%) contrast(92%);
+  opacity: 0.72;
+  /* Smooth subtle 250ms color-reveal transition without scaling jumps or distortions */
+  transition: opacity 250ms ease-in-out, filter 250ms ease-in-out;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Hover or keyboard focus smoothly reveals authentic brand colors */
+.brand-collab-logo-item:hover .brand-collab-img,
+.brand-collab-logo-item:focus-visible .brand-collab-img {
+  opacity: 1;
+  filter: none;
+}
+
+/* Mathematically seamless right-to-left translation */
+@keyframes brand-scroll-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Bottom text */
+.brand-collab-footer-wrapper {
+  text-align: center;
+  margin-top: clamp(28px, 3.5vw, 40px);
+  padding: 0 20px;
+}
+
+.brand-collab-footer {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1rem, 1.25vw, 1.1875rem);
+  font-style: italic;
+  font-weight: 400;
+  color: #30231D;
+  opacity: 0.65;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .brand-collab-track {
+    animation-duration: 28s;
+  }
+  .brand-collab-group {
+    gap: clamp(32px, 6vw, 48px);
+    padding-right: clamp(32px, 6vw, 48px);
+  }
+  .brand-collab-logo-item {
+    height: 38px;
+  }
+  .brand-collab-img {
+    height: var(--brand-height-mobile, 18px);
+    max-height: var(--brand-height-mobile, 18px);
+    max-width: 130px;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .brand-collab-marquee-container {
+    -webkit-mask-image: none;
+    mask-image: none;
+    overflow: visible;
+    padding: 0 24px;
+  }
+  .brand-collab-track {
+    animation: none !important;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .brand-collab-group {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px clamp(32px, 4vw, 56px);
+    padding-right: 0;
+    width: 100%;
+  }
+  .brand-collab-group:nth-child(2) {
+    display: none !important;
+  }
+}
+
+/* ===========================================================================
+   4. SELECTED WORK (RECREATED FROM REFERENCE https://ugc-weld-five.vercel.app/)
+   Sticky horizontal scroll pinned track, video hover preview, trailing cursor,
+   progress counter, mobile snap track, and lightbox viewer.
+   =========================================================================== */
+
+.sw-section {
+  background: #30231D;
+  border-top: none;
+  height: 350vh;
+  position: relative;
+}
+
+.sw-sticky {
+  flex-direction: column;
+  height: 100vh;
+  padding-top: clamp(48px, 6vh, 68px);
+  padding-bottom: clamp(12px, 1.6vh, 22px);
+  display: flex;
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.sw-header {
+  text-align: center;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: center;
+  width: 100%;
+  margin-bottom: clamp(36px, 5vh, 60px);
+  padding: 0 clamp(20px, 4vw, 56px);
+  display: flex;
+}
+
+.sw-eyebrow {
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #D5B99C;
+  text-align: center;
+  margin: 0 0 6px;
+  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+.sw-heading {
+  letter-spacing: -0.015em;
+  color: #F3EADF;
+  text-align: center;
+  margin: 0 0 6px;
+  font-family: "Cormorant Garamond", "Libre Baskerville", Georgia, serif;
+  font-size: clamp(1.65rem, 2.8vw, 2.5rem);
+  font-weight: 400;
+  line-height: 1.08;
+}
+
+.sw-description {
+  color: #D5B99C;
+  text-align: center;
+  max-width: 520px;
+  margin: 0 auto;
+  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(0.8rem, 0.82vw, 0.9rem);
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+.sw-track {
+  will-change: transform;
+  flex: 1;
+  align-items: flex-start;
+  gap: clamp(18px, 1.8vw, 28px);
+  padding: 0 clamp(24px, 3.5vw, 56px);
+  display: flex;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.sw-track:active {
+  cursor: grabbing;
+}
+
+.sw-card {
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 10px;
+  width: calc(clamp(376px, min(57vh, calc((100vw - 120px) * 0.37)), 622px) * 0.8);
+  max-width: 100%;
+  display: flex;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.sw-card-media {
+  aspect-ratio: 4 / 5;
+  cursor: pointer;
+  background: rgba(243, 234, 223, 0.05);
+  border-radius: 14px;
+  width: 100%;
+  height: clamp(376px, min(57vh, calc((100vw - 120px) * 0.37)), 622px);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(243, 234, 223, 0.1);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.sw-card-media img,
+.sw-card-media video {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  inset: 0;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.sw-card-media img,
+.sw-card-media video {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sw-card-media video {
+  z-index: 1;
+}
+
+.sw-card-poster-fade {
+  z-index: 2;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  position: absolute;
+  inset: 0;
+}
+
+.sw-card-poster-fade img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+
+.sw-card-poster-fade.is-playing {
+  opacity: 0;
+}
+
+.sw-card-media:hover img,
+.sw-card-media:hover video {
+  transform: scale(1.03);
+}
+
+.sw-card-media:focus-visible {
+  outline: 2px solid #F3EADF;
+  outline-offset: 4px;
+}
+
+.sw-custom-cursor {
+  background: #F3EADF;
+  width: 68px;
+  height: 68px;
+  color: #30231D;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 90;
+  opacity: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(243, 234, 223, 0.2);
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1;
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-100px, -100px) translate(-50%, -50%) scale(0.4);
+  will-change: transform, opacity;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.sw-custom-cursor span {
+  padding-left: 0.22em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sw-track .sw-card-media {
+    cursor: none;
+  }
+}
+
+@media (hover: none) or (pointer: coarse), (max-width: 767px) {
+  .sw-custom-cursor {
+    display: none !important;
+  }
+  .sw-track .sw-card-media,
+  .sw-mobile-track .sw-card-media {
+    cursor: pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sw-custom-cursor {
+    display: none !important;
+  }
+  .sw-track .sw-card-media {
+    cursor: pointer !important;
+  }
+}
+
+.sw-card-info {
+  padding: 0 2px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sw-card-title {
+  color: #F3EADF;
+  margin: 0 0 6px;
+  font-family: "Cormorant Garamond", "Libre Baskerville", Georgia, serif;
+  font-size: clamp(1.125rem, 1.35vw, 1.45rem);
+  font-weight: 400;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 2.4em;
+}
+
+.sw-card-category {
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #D5B99C;
+  margin: 0;
+  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.sw-card-desc {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .sw-section {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .sw-mobile-section {
+    display: none;
+  }
+}
+
+.sw-mobile-section {
+  background: #30231D;
+  border-top: none;
+  padding: clamp(48px, 7vw, 72px) 0;
+}
+
+.sw-mobile-header {
+  text-align: center;
+  margin-bottom: 32px;
+  padding: 0 clamp(20px, 5vw, 32px);
+}
+
+.sw-mobile-header .sw-description {
+  margin: 0 auto;
+}
+
+.sw-mobile-track {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 16px;
+  padding: 0 22px;
+  display: flex;
+  align-items: flex-start;
+  overflow-x: auto;
+}
+
+.sw-mobile-track::-webkit-scrollbar {
+  display: none;
+}
+
+.sw-mobile-card {
+  scroll-snap-align: center;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 12px;
+  width: calc(100vw - 44px);
+  max-width: 492px;
+  display: flex;
+}
+
+.sw-mobile-card .sw-card-media {
+  aspect-ratio: 4 / 5;
+  height: auto;
+  width: 100%;
+  border-radius: 14px;
+}
+
+/* Lightbox Modal */
+.lightbox {
+  z-index: 9999;
+  background: rgba(48, 35, 29, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: fixed;
+  inset: 0;
+  cursor: pointer;
+  animation: 0.25s lightbox-in ease-out;
+}
+
+@keyframes lightbox-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.lightbox-close {
+  border: 1px solid rgba(243, 234, 223, 0.3);
+  background: transparent;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  position: absolute;
+  top: clamp(16px, 3vw, 32px);
+  right: clamp(16px, 3vw, 32px);
+  color: #F3EADF;
+  cursor: pointer;
+  z-index: 10000;
+  border-radius: 50%;
+  font-size: 1.125rem;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.lightbox-close:hover {
+  background: rgba(243, 234, 223, 0.15);
+  border-color: rgba(243, 234, 223, 0.5);
+  transform: scale(1.05);
+}
+
+.lightbox-content {
+  cursor: default;
+  flex-direction: column;
+  align-items: center;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  position: relative;
+}
+
+.lightbox-media-wrap {
+  background: #1a1411;
+  border-radius: 14px;
+  justify-content: center;
+  align-items: center;
+  max-width: 90vw;
+  max-height: 82vh;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.65);
+}
+
+.lightbox-img {
+  object-fit: contain;
+  border-radius: 14px;
+  width: auto;
+  max-width: min(88vw, 900px);
+  height: auto;
+  max-height: 80vh;
+  display: block;
+}
+
+.lightbox-video {
+  aspect-ratio: 9/16;
+  object-fit: contain;
+  background: #000;
+  border-radius: 14px;
+  outline: none;
+  max-width: min(88vw, 420px);
+  max-height: 80vh;
+  display: block;
+}
+
+.lightbox-info {
+  text-align: center;
+  color: #F3EADF;
+  margin-top: 14px;
+}
+
+.lightbox-title {
+  color: #F3EADF;
+  margin: 0;
+  font-family: "Cormorant Garamond", "Libre Baskerville", Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.lightbox-category {
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #D5B99C;
+  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.6875rem;
+  margin-top: 4px;
+}

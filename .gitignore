@@ -15,6 +15,9 @@ dist-ssr
 .tanstack/**
 .nitro
 *.local
+.env
+.env.*
+!.env.example
 
 # Wrangler / Cloudflare / Vercel
 .wrangler/
@@ -31,3 +34,17 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Scratch extraction and helper files in root
+*.py
+*.mjs
+*.html
+*.dump.txt
+*.txt
+*_vars.txt
+govardhan_*.js
+solvo_*.js
+SaveInta.com_*.mp4
+scratch/
+scripts/
+data/

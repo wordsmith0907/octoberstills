@@ -2,6 +2,8 @@ import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+import { executeChat } from "./lib/gemini-service";
+import { saveInquiry } from "./lib/lead-storage";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -18,8 +20,6 @@ async function getServerEntry(): Promise<ServerEntry> {
   return serverEntryPromise;
 }
 
-// h3 swallows in-handler throws into a normal 500 Response with body
-// {"unhandled":true,"message":"HTTPError"} — try/catch alone never fires for those.
 async function normalizeCatastrophicSsrResponse(response: Response): Promise<Response> {
   if (response.status < 500) return response;
   const contentType = response.headers.get("content-type") ?? "";
@@ -47,6 +47,30 @@ function isH3SwallowedErrorBody(body: string): boolean {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const url = new URL(request.url);
+
+      // Handle REST Chat Endpoint
+      if (url.pathname === "/api/chat" && request.method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const clientIp = request.headers.get("x-forwarded-for") || "unknown";
+        const result = await executeChat(body, clientIp);
+        return new Response(JSON.stringify(result), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
+      // Handle REST Lead Submission Endpoint
+      if (url.pathname === "/api/inquiry" && request.method === "POST") {
+        const body = await request.json().catch(() => ({}));
+        const clientIp = request.headers.get("x-forwarded-for") || "unknown";
+        const result = await saveInquiry(body, clientIp);
+        return new Response(JSON.stringify(result), {
+          status: result.success ? 200 : 400,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);

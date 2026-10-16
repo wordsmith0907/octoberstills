@@ -73,10 +73,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Aurea Biazon — UGC Creator" },
-      { name: "description", content: "Authentic UGC and visual storytelling for beauty, lifestyle and food brands." },
-      { property: "og:title", content: "Aurea Biazon — UGC Creator" },
-      { property: "og:description", content: "Authentic UGC and visual storytelling for beauty, lifestyle and food brands." },
+      { title: "OCTOBERSTILLS — Chaitya Shah | Photography, Films & Creative Direction" },
+      {
+        name: "description",
+        content:
+          "Photography, filmmaking, creative direction, and high-aesthetic UGC brand storytelling by Chaitya Shah.",
+      },
+      { property: "og:title", content: "OCTOBERSTILLS — Chaitya Shah" },
+      {
+        property: "og:description",
+        content:
+          "Editorial portfolio of photography, cinematic films, creative direction, and creator-led brand storytelling by Chaitya Shah.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -93,6 +101,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap",
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap",
       },
     ],
   }),

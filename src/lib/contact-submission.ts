@@ -1,21 +1,20 @@
 /**
- * Contact Submission Adapter
+ * Contact Submission Adapter — Octoberstills
  *
  * Handles validation, client-side rate limiting, sanitized dispatch,
- * and confirmed delivery reporting for Aurea Biazon's Editorial Contact Experience.
+ * and confirmed delivery reporting for Chaitya Shah's Octoberstills studio.
  *
  * Configuration:
  * 1. Transactional Email API / Webhook (Preferred):
  *    Set environment variable `VITE_CONTACT_API_URL` to your production endpoint
- *    (e.g., Resend webhook, Formspree endpoint, or serverless function:
- *     https://formspree.io/f/xxxxxx or https://api.resend.com/emails).
+ *    (e.g., Resend webhook, Formspree endpoint, or serverless function).
  *
  * 2. Test / Development Mode:
  *    Set `VITE_CONTACT_TEST_MODE="true"` to safely simulate confirmed API acceptance
  *    without sending real emails or leaking test data.
  *
  * 3. Verified Recipient:
- *    The designated creator email is `hello@aureabiazon.com`.
+ *    The designated studio email is `octoberstills@gmail.com`.
  */
 
 export interface ContactFormData {
@@ -60,7 +59,8 @@ export function validateContactForm(data: ContactFormData): FormErrors {
   }
 
   const trimmedEmail = data.email.trim();
-  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+  const emailRegex =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
   if (!trimmedEmail) {
     errors.email = "Please enter your email address.";
   } else if (!emailRegex.test(trimmedEmail)) {
@@ -86,7 +86,6 @@ export function extractFirstName(fullName: string): string {
   const clean = fullName.trim();
   if (!clean) return "";
   const first = clean.split(/\s+/)[0];
-  // Filter out non-alphabetic garbage or emoji
   if (!first || first.length > 30 || !/^[A-Za-zÀ-ÖØ-öø-ÿ'-]+$/.test(first)) {
     return "";
   }
@@ -128,7 +127,7 @@ export async function submitContactForm(
 
   // Safe testing mode (for automated / local test without sending live email)
   if (isTestMode && !apiUrl) {
-    await new Promise((res) => setTimeout(res, 800)); // Simulate realistic network roundtrip
+    await new Promise((res) => setTimeout(res, 600));
     lastSubmissionTimestamp = now;
     lastSubmissionHash = submissionHash;
     return { success: true };
@@ -143,7 +142,7 @@ export async function submitContactForm(
         brand: data.brand?.trim() || "",
         service: data.service || "Unspecified",
         message: data.message.trim(),
-        to: "hello@aureabiazon.com",
+        to: "octoberstills@gmail.com",
         replyTo: data.email.trim(),
         submittedAt: new Date().toISOString(),
       };
@@ -161,7 +160,7 @@ export async function submitContactForm(
         return {
           success: false,
           error:
-            "Your enquiry couldn't be confirmed. Please try again, or contact me directly by email.",
+            "Your enquiry couldn't be confirmed. Please try again, or contact Chaitya directly at octoberstills@gmail.com.",
         };
       }
 
@@ -173,17 +172,40 @@ export async function submitContactForm(
       return {
         success: false,
         error:
-          "Your enquiry couldn't be confirmed. Please try again, or contact me directly by email.",
+          "Your enquiry couldn't be confirmed. Please try again, or contact Chaitya directly at octoberstills@gmail.com.",
       };
     }
   }
 
-  // Unconfigured state: Do NOT fake success, do NOT show thank-you animation,
-  // report honest actionable configuration notice.
+  // Fallback: Also try the server lead storage endpoint /api/inquiry!
+  try {
+    const res = await fetch("/api/inquiry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: data.name.trim(),
+        email: data.email.trim(),
+        brand: data.brand?.trim() || undefined,
+        projectType: data.service || "General Inquiry",
+        brief: data.message.trim(),
+        sourceSection: "contact-form",
+        consentGiven: true,
+      }),
+    });
+
+    if (res.ok) {
+      lastSubmissionTimestamp = now;
+      lastSubmissionHash = submissionHash;
+      return { success: true };
+    }
+  } catch {
+    // pass through to unconfigured error
+  }
+
   return {
     success: false,
     unconfigured: true,
     error:
-      "Contact backend is not configured yet (missing VITE_CONTACT_API_URL). Please configure an email API endpoint or contact hello@aureabiazon.com directly.",
+      "Contact endpoint is unconfigured. Please email Chaitya directly at octoberstills@gmail.com.",
   };
 }

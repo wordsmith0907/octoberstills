@@ -1,0 +1,138 @@
+import React from "react";
+import { motion } from "framer-motion";
+
+interface Discipline {
+  id: string;
+  number: string;
+  title: string;
+  mediaType: "image" | "video";
+  mediaSrc: string;
+  poster?: string;
+}
+
+const DISCIPLINES: Discipline[] = [
+  {
+    id: "photography",
+    number: "01",
+    title: "Photography",
+    mediaType: "image",
+    mediaSrc: "/portfolio/services_detail.jpg",
+  },
+  {
+    id: "cinematography",
+    number: "02",
+    title: "Films & Cinematography",
+    mediaType: "video",
+    mediaSrc: "/ringview/5.mp4",
+    poster: "/ringview/5-poster.jpg",
+  },
+  {
+    id: "ugc-content",
+    number: "03",
+    title: "UGC & Brand Content",
+    mediaType: "video",
+    mediaSrc: "/ringview/7.mp4",
+    poster: "/ringview/7-poster.jpg",
+  },
+];
+
+export function CreativeDisciplines() {
+  return (
+    <section
+      id="services"
+      className="relative w-full py-16 md:py-24 px-6 sm:px-12 md:px-20 lg:px-28 overflow-hidden text-[#30231D]"
+      style={{ backgroundColor: "#D5B99C" }}
+      aria-label="Creative Disciplines"
+    >
+      <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 md:pb-8 border-b border-[#30231D]/15">
+          <div className="space-y-2.5">
+            <div className="flex items-center gap-2.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B9784E]" />
+              <span
+                className="text-[11px] md:text-[12px] uppercase font-medium tracking-[0.28em] text-[#30231D]/75"
+                style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
+              >
+                Ways of Seeing
+              </span>
+            </div>
+
+            <h2
+              className="text-[clamp(2.5rem,5.5vw,4.5rem)] font-light text-[#30231D] tracking-tight leading-[1.05]"
+              style={{
+                fontFamily: '"Cormorant Garamond", "Libre Baskerville", Georgia, serif',
+              }}
+            >
+              Creative Disciplines
+            </h2>
+          </div>
+
+          <p
+            className="text-[14px] md:text-[15px] text-[#30231D]/70 font-normal max-w-sm"
+            style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
+          >
+            Still and moving image shaped with quiet intention.
+          </p>
+        </div>
+
+        {/* Three Minimal Editorial Photographic Columns */}
+        <div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-3 gap-8 xl:gap-10">
+          {DISCIPLINES.map((discipline, idx) => (
+            <motion.div
+              key={discipline.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{
+                duration: 0.7,
+                delay: idx * 0.1,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
+              className="group flex flex-col cursor-pointer"
+            >
+              {/* Large Portrait Photograph / Video Window (Strict 4:5 ratio) */}
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[2px] bg-[#30231D]/10">
+                {discipline.mediaType === "image" ? (
+                  <img
+                    src={discipline.mediaSrc}
+                    alt={discipline.title}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] motion-reduce:transform-none"
+                    loading="lazy"
+                  />
+                ) : (
+                  <video
+                    src={discipline.mediaSrc}
+                    poster={discipline.poster}
+                    muted
+                    loop
+                    playsInline
+                    autoPlay
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] motion-reduce:transform-none"
+                  />
+                )}
+              </div>
+
+              {/* Number and Title beneath Photograph */}
+              <div className="pt-4 md:pt-5 flex items-baseline gap-3">
+                <span
+                  className="text-[12px] md:text-[13px] font-medium tracking-[0.22em] text-[#30231D]/60 group-hover:text-[#B9784E] transition-colors duration-300 select-none"
+                  style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
+                >
+                  {discipline.number}
+                </span>
+                <span className="text-[#30231D]/25 font-light select-none">/</span>
+                <h3
+                  className="text-[clamp(1.4rem,2vw,1.9rem)] font-light text-[#30231D] tracking-tight leading-tight group-hover:text-[#B9784E] transition-colors duration-300"
+                  style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                >
+                  {discipline.title}
+                </h3>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
