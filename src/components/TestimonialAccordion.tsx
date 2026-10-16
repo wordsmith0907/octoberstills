@@ -7,6 +7,8 @@ interface TestimonialAccordionProps {
   testimonials?: TestimonialItem[];
 }
 
+const POSITION_HEIGHTS = ["55%", "80%", "100%", "80%", "55%"];
+
 export function TestimonialAccordion({
   testimonials = TESTIMONIALS_DATA,
 }: TestimonialAccordionProps) {
@@ -410,7 +412,7 @@ export function TestimonialAccordion({
         {/* Desktop & Tablet Horizontal Expanding Accordion (hidden on mobile) */}
         <div
           ref={containerRef}
-          className="hidden md:flex gap-3 lg:gap-3.5 h-[420px] lg:h-[450px] w-full items-stretch select-none relative"
+          className="hidden md:flex gap-3 lg:gap-3.5 h-[420px] lg:h-[450px] w-full items-center select-none relative"
           role="tablist"
           aria-label="Client testimonials accordion"
           onMouseEnter={() => {
@@ -442,7 +444,7 @@ export function TestimonialAccordion({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.65, ease: [0.25, 1, 0.5, 1] }}
                 onAnimationComplete={() => setExitingCard(null)}
-                className="absolute left-0 top-0 rounded-2xl overflow-hidden border border-[#30231D]/15 bg-[#251b16] pointer-events-none z-10"
+                className="absolute left-0 top-1/2 -translate-y-1/2 rounded-2xl overflow-hidden border border-[#30231D]/15 bg-[#251b16] pointer-events-none z-10"
                 style={{
                   width: exitingCard.width,
                   height: exitingCard.height,
@@ -497,7 +499,7 @@ export function TestimonialAccordion({
                 onClick={() => handleCardClick(index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
                 aria-label={`Testimonial from ${item.clientName}, ${item.brand}`}
-                className={`group relative rounded-2xl overflow-hidden border border-[#30231D]/15 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B9784E] text-left transition-[flex-grow] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] cursor-pointer ${
+                className={`group relative rounded-2xl overflow-hidden border border-[#30231D]/15 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B9784E] text-left cursor-pointer ${
                   isExpanded
                     ? "bg-[#30231D] border-[#30231D]/40 shadow-md"
                     : "bg-[#251b16] hover:border-[#B9784E]/50"
@@ -506,6 +508,9 @@ export function TestimonialAccordion({
                   flexGrow: isExpanded ? 5.5 : 1,
                   flexShrink: 1,
                   flexBasis: "0%",
+                  height: POSITION_HEIGHTS[index] || "100%",
+                  transition:
+                    "flex-grow 750ms cubic-bezier(0.25, 1, 0.5, 1), height 750ms cubic-bezier(0.25, 1, 0.5, 1)",
                 }}
               >
                 {isExpanded ? (
