@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export interface SelectedWorkProject {
   id: string;
@@ -195,6 +196,29 @@ export function SelectedStories() {
     };
   }, []);
 
+  const maxTrackScrollRef = useRef(0);
+
+  // Dynamic calculation for maximum horizontal scroll:
+  // Ensures the final card is completely visible with right-side breathing room
+  // equal to exactly 50% of the dynamic gap between adjacent cards.
+  const calculateMaxTrackScroll = useCallback((track: HTMLElement): number => {
+    const cards = track.querySelectorAll<HTMLElement>(".sw-card");
+    if (cards.length === 0) return 0;
+
+    const lastCard = cards[cards.length - 1];
+    const trackStyle = window.getComputedStyle(track);
+    const cardGap = parseFloat(trackStyle.gap || trackStyle.columnGap) || 0;
+    const trailingSpacing = cardGap * 0.5;
+    const containerWidth = track.parentElement ? track.parentElement.clientWidth : window.innerWidth;
+
+    const currentTransformMatch = track.style.transform.match(/translate3d\(([-0-9.]+)px/);
+    const currentX = currentTransformMatch ? parseFloat(currentTransformMatch[1]) : 0;
+    const lastCardRightAtZero = lastCard.getBoundingClientRect().right - currentX;
+
+    const targetMaxScroll = lastCardRightAtZero - containerWidth + trailingSpacing;
+    return Math.max(0, targetMaxScroll);
+  }, []);
+
   // Sticky horizontal scroll calculation matching reference
   useEffect(() => {
     const section = sectionRef.current;
@@ -204,6 +228,14 @@ export function SelectedStories() {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const isMobile = () => window.innerWidth < 768;
     let isTicking = false;
+
+    const updateMeasurements = () => {
+      if (!trackRef.current) return;
+      maxTrackScrollRef.current = calculateMaxTrackScroll(trackRef.current);
+      if (typeof ScrollTrigger !== "undefined") {
+        ScrollTrigger.refresh();
+      }
+    };
 
     const handleScroll = () => {
       if (isMobile() || reducedMotion.matches || isTicking) return;
@@ -220,7 +252,10 @@ export function SelectedStories() {
         const scrollY = -rect.top;
         const p = Math.max(0, Math.min(1, scrollY / scrollableDist));
 
-        const maxTrackScroll = track.scrollWidth - window.innerWidth;
+        if (maxTrackScrollRef.current <= 0) {
+          maxTrackScrollRef.current = calculateMaxTrackScroll(track);
+        }
+        const maxTrackScroll = maxTrackScrollRef.current;
         if (maxTrackScroll > 0) {
           const x = -p * maxTrackScroll;
           track.style.transform = `translate3d(${x}px, 0, 0)`;
@@ -229,15 +264,47 @@ export function SelectedStories() {
       });
     };
 
+    const handleResize = () => {
+      updateMeasurements();
+      handleScroll();
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll, { passive: true });
-    handleScroll();
+    window.addEventListener("resize", handleResize, { passive: true });
+    window.addEventListener("orientationchange", handleResize, { passive: true });
+
+    // Recalculate once web fonts have finished loading
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => {
+        handleResize();
+      });
+    }
+
+    // ResizeObserver on track to adapt dynamically to card resizing or layout updates
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(() => {
+        handleResize();
+      });
+      resizeObserver.observe(track);
+    }
+
+    // Media element load listeners to update measurements once card media resolves
+    const mediaElements = track.querySelectorAll("img, video");
+    mediaElements.forEach((el) => {
+      el.addEventListener("load", handleResize, { once: true });
+      el.addEventListener("loadeddata", handleResize, { once: true });
+    });
+
+    handleResize();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleResize);
+      resizeObserver?.disconnect();
     };
-  }, []);
+  }, [calculateMaxTrackScroll]);
 
   // Drag interaction for desktop carousel
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -256,7 +323,7 @@ export function SelectedStories() {
     }
     if (hasDraggedRef.current) {
       const scrollableDist = sectionRef.current.offsetHeight - window.innerHeight;
-      const maxTrackScroll = trackRef.current.scrollWidth - window.innerWidth;
+      const maxTrackScroll = maxTrackScrollRef.current || calculateMaxTrackScroll(trackRef.current);
       if (scrollableDist > 0 && maxTrackScroll > 0) {
         const scrollRatio = scrollableDist / maxTrackScroll;
         const targetScroll = startScrollYRef.current - deltaX * scrollRatio;
