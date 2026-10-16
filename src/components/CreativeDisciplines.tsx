@@ -91,8 +91,8 @@ export function CreativeDisciplines() {
               }}
               className="group flex flex-col cursor-pointer"
             >
-              {/* Large Portrait Photograph / Video Window (Strict 4:5 ratio) */}
-              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[2px] bg-[#30231D]/10">
+              {/* Large Portrait Photograph / Video Window (Strict 4:5 ratio, curved matching Selected Work) */}
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[14px] bg-[#30231D]/10">
                 {discipline.mediaType === "image" ? (
                   <img
                     src={discipline.mediaSrc}
