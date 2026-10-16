@@ -308,7 +308,7 @@ export async function executeChat(
 
   // 2. Read Gemini API key securely from server environment
   const apiKey = process.env.GEMINI_API_KEY;
-  const modelName = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  const modelName = process.env.GEMINI_MODEL || "gemini-3.5-flash";
 
   // Graceful fallback if key is unconfigured
   if (!apiKey || apiKey === "placeholder" || apiKey.trim().length === 0) {
@@ -390,10 +390,10 @@ export async function executeChat(
       new Set(
         [
           process.env.GEMINI_MODEL,
-          "gemini-2.5-flash",
-          "gemini-2.5-flash-lite",
-          "gemini-1.5-flash",
-          "gemini-2.0-flash",
+          "gemini-3.5-flash",
+          "gemini-3.5-flash-lite",
+          "gemini-3.1-flash-lite",
+          "gemini-3.8-flash",
         ].filter(Boolean) as string[]
       )
     );
