@@ -496,12 +496,13 @@ export function TestimonialAccordion({
                         </div>
 
                         {item.verifiedLink && (
-                          <span
-                            className="inline-flex items-center text-[10px] uppercase tracking-wider text-[#D5B99C]/80 group-hover:text-[#F3EADF] transition-colors shrink-0"
+                          <a
+                            href={item.verifiedLink}
+                            className="oct-inward-btn oct-inward-btn-light px-3 py-1 text-[9px] uppercase tracking-wider font-medium shrink-0 cursor-pointer"
                             title="View project in Selected Work"
                           >
                             <span className="hidden lg:inline text-[9px]">Featured Work</span>
-                          </span>
+                          </a>
                         )}
                       </div>
                     </div>
@@ -616,7 +617,7 @@ export function TestimonialAccordion({
                 {mobileActiveItem.verifiedLink && (
                   <a
                     href={mobileActiveItem.verifiedLink}
-                    className="px-3 py-1.5 rounded-full border border-[#F3EADF]/20 text-[#D5B99C] hover:text-[#F3EADF] hover:bg-white/5 transition-colors text-[10px] uppercase tracking-wider font-medium"
+                    className="oct-inward-btn oct-inward-btn-light px-3.5 py-1.5 text-[10px] uppercase tracking-wider font-medium cursor-pointer"
                     aria-label={`View ${mobileActiveItem.brand} work`}
                   >
                     Featured Work
