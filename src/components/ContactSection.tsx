@@ -65,8 +65,8 @@ export function ContactSection() {
 
       <div className="max-w-7xl mx-auto relative z-10 space-y-20 md:space-y-28">
         {/* Top Editorial Section Header */}
-        <div className="space-y-4 max-w-4xl">
-          <div className="flex items-center gap-3">
+        <div className="space-y-4 max-w-4xl mx-auto text-center flex flex-col items-center justify-center">
+          <div className="flex items-center justify-center gap-3">
             <span className="w-1.5 h-1.5 rounded-full bg-[#B9784E]" />
             <span
               className="text-[11px] md:text-[12px] uppercase font-medium tracking-[0.28em] text-[#D5B99C]"
@@ -77,7 +77,7 @@ export function ContactSection() {
           </div>
 
           <h2
-            className="text-[clamp(2.8rem,7vw,6rem)] font-light leading-[1.05] tracking-tight text-[#F3EADF]"
+            className="text-[clamp(2.8rem,7vw,6rem)] font-light leading-[1.05] tracking-tight text-[#F3EADF] text-center"
             style={{
               fontFamily: '"Cormorant Garamond", "Libre Baskerville", Georgia, serif',
             }}
@@ -87,7 +87,7 @@ export function ContactSection() {
           </h2>
 
           <p
-            className="text-[16px] md:text-[18px] text-[#F3EADF]/80 font-normal leading-relaxed max-w-2xl pt-2"
+            className="text-[16px] md:text-[18px] text-[#F3EADF]/80 font-normal leading-relaxed max-w-2xl mx-auto pt-2 text-center"
             style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
           >
             Have a project, campaign, or collaboration in mind? I&apos;d love to hear your vision
@@ -263,10 +263,12 @@ export function ContactSection() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="inline-flex items-center justify-center gap-3 rounded-full uppercase tracking-[0.2em] text-[13px] px-10 py-5 font-medium transition-all duration-300 bg-[#F3EADF] text-[#30231D] hover:bg-[#B9784E] hover:text-[#F3EADF] disabled:opacity-50 cursor-pointer"
+                    className="oct-btn oct-btn-solid-light inline-flex items-center justify-center rounded-full uppercase tracking-[0.2em] text-[13px] px-10 py-5 font-medium disabled:opacity-50 cursor-pointer"
                     style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
                   >
-                    <span>{isSubmitting ? "Sending..." : "Send an Inquiry"}</span>
+                    <span className="oct-btn-content">
+                      {isSubmitting ? "Sending..." : "Send an Inquiry"}
+                    </span>
                   </button>
 
                   <div className="text-[12px] text-[#F3EADF]/60 tracking-[0.1em]">

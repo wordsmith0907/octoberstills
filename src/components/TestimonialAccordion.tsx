@@ -321,7 +321,7 @@ export function TestimonialAccordion({
       <div className="max-w-7xl mx-auto space-y-12 md:space-y-16">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-[#30231D]/15">
-          <div className="space-y-3">
+          <div className="space-y-3 max-w-2xl text-left">
             <div className="flex items-center gap-3">
               <span className="w-1.5 h-1.5 rounded-full bg-[#B9784E]" />
               <span
@@ -337,16 +337,15 @@ export function TestimonialAccordion({
             >
               Stories, through their eyes.
             </h2>
-          </div>
-
-          <div className="flex flex-col sm:flex-row md:flex-col items-start md:items-end justify-between gap-4 max-w-md">
             <p
-              className="text-xs sm:text-sm text-[#30231D]/70 leading-relaxed font-sans"
+              className="text-xs sm:text-sm text-[#30231D]/70 leading-relaxed font-sans max-w-lg pt-1"
               style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
             >
               Unfiltered words from creative directors, founders, and marketing leaders who entrusted their vision to Octoberstills.
             </p>
+          </div>
 
+          <div className="flex items-center shrink-0">
             {/* Accessibility & Rotation Control Button */}
             <button
               type="button"
@@ -497,12 +496,13 @@ export function TestimonialAccordion({
                         </div>
 
                         {item.verifiedLink && (
-                          <span
-                            className="inline-flex items-center text-[10px] uppercase tracking-wider text-[#D5B99C]/80 group-hover:text-[#F3EADF] transition-colors shrink-0"
+                          <a
+                            href={item.verifiedLink}
+                            className="oct-btn oct-btn-light px-3 py-1 rounded-full text-[9px] uppercase tracking-wider font-medium shrink-0"
                             title="View project in Selected Work"
                           >
-                            <span className="hidden lg:inline text-[9px]">Featured Work</span>
-                          </span>
+                            <span className="oct-btn-content hidden lg:inline">Featured Work</span>
+                          </a>
                         )}
                       </div>
                     </div>
@@ -617,10 +617,10 @@ export function TestimonialAccordion({
                 {mobileActiveItem.verifiedLink && (
                   <a
                     href={mobileActiveItem.verifiedLink}
-                    className="px-3 py-1.5 rounded-full border border-[#F3EADF]/20 text-[#D5B99C] hover:text-[#F3EADF] hover:bg-white/5 transition-colors text-[10px] uppercase tracking-wider font-medium"
+                    className="oct-btn oct-btn-light px-3 py-1.5 rounded-full text-[10px] uppercase tracking-wider font-medium"
                     aria-label={`View ${mobileActiveItem.brand} work`}
                   >
-                    Featured Work
+                    <span className="oct-btn-content">Featured Work</span>
                   </a>
                 )}
               </div>

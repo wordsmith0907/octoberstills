@@ -46,30 +46,28 @@ export function CreativeDisciplines() {
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 md:pb-8 border-b border-[#30231D]/15">
-          <div className="space-y-2.5">
-            <div className="flex items-center gap-2.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#B9784E]" />
-              <span
-                className="text-[11px] md:text-[12px] uppercase font-medium tracking-[0.28em] text-[#30231D]/75"
-                style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
-              >
-                Ways of Seeing
-              </span>
-            </div>
-
-            <h2
-              className="text-[clamp(2.5rem,5.5vw,4.5rem)] font-light text-[#30231D] tracking-tight leading-[1.05]"
-              style={{
-                fontFamily: '"Cormorant Garamond", "Libre Baskerville", Georgia, serif',
-              }}
+        <div className="flex flex-col items-center justify-center text-center space-y-3 max-w-2xl mx-auto pb-8 md:pb-10 border-b border-[#30231D]/15">
+          <div className="flex items-center justify-center gap-2.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#B9784E]" />
+            <span
+              className="text-[11px] md:text-[12px] uppercase font-medium tracking-[0.28em] text-[#30231D]/75"
+              style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
             >
-              Creative Disciplines
-            </h2>
+              Ways of Seeing
+            </span>
           </div>
 
+          <h2
+            className="text-[clamp(2.5rem,5.5vw,4.5rem)] font-light text-[#30231D] tracking-tight leading-[1.05]"
+            style={{
+              fontFamily: '"Cormorant Garamond", "Libre Baskerville", Georgia, serif',
+            }}
+          >
+            Creative Disciplines
+          </h2>
+
           <p
-            className="text-[14px] md:text-[15px] text-[#30231D]/70 font-normal max-w-sm"
+            className="text-[14px] md:text-[15px] text-[#30231D]/70 font-normal max-w-md mx-auto"
             style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
           >
             Still and moving image shaped with quiet intention.

@@ -187,7 +187,7 @@ export function OctoberJournal() {
       <div className="max-w-7xl mx-auto space-y-10 md:space-y-14">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-[#30231D]/15">
-          <div className="space-y-2.5">
+          <div className="space-y-2 text-left">
             <div className="flex items-center gap-2.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#B9784E]" />
               <span
@@ -203,14 +203,13 @@ export function OctoberJournal() {
             >
               The October Journal
             </h2>
+            <p
+              className="text-sm md:text-base text-[#30231D]/70 font-light italic pt-0.5"
+              style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+            >
+              Little moments, lately.
+            </p>
           </div>
-
-          <p
-            className="text-sm md:text-base text-[#30231D]/70 font-light italic"
-            style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
-          >
-            Little moments, lately.
-          </p>
         </div>
 
         {/* Desktop Layout: 4 Prominent Cards with Subtle Editorial Stagger (md and up) */}
@@ -238,13 +237,10 @@ export function OctoberJournal() {
             href={INSTAGRAM_PROFILE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-[#30231D]/25 text-xs uppercase tracking-[0.22em] text-[#30231D] font-medium hover:bg-[#30231D] hover:text-[#F3EADF] hover:border-[#30231D] transition-all duration-300"
+            className="oct-btn oct-btn-dark px-8 py-3.5 rounded-full text-xs uppercase tracking-[0.22em] font-medium cursor-pointer"
             style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
           >
-            <span>Follow along on Instagram</span>
-            <span className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-              ↗
-            </span>
+            <span className="oct-btn-content">Follow along on Instagram</span>
           </a>
         </div>
       </div>
