@@ -263,12 +263,10 @@ export function ContactSection() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="oct-btn oct-btn-solid-light inline-flex items-center justify-center rounded-full uppercase tracking-[0.2em] text-[13px] px-10 py-5 font-medium disabled:opacity-50 cursor-pointer"
+                    className="inline-flex items-center justify-center gap-3 rounded-full uppercase tracking-[0.2em] text-[13px] px-10 py-5 font-medium transition-all duration-300 bg-[#F3EADF] text-[#30231D] hover:bg-[#B9784E] hover:text-[#F3EADF] disabled:opacity-50 cursor-pointer"
                     style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
                   >
-                    <span className="oct-btn-content">
-                      {isSubmitting ? "Sending..." : "Send an Inquiry"}
-                    </span>
+                    <span>{isSubmitting ? "Sending..." : "Send an Inquiry"}</span>
                   </button>
 
                   <div className="text-[12px] text-[#F3EADF]/60 tracking-[0.1em]">

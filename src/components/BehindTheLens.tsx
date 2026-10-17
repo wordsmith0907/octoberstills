@@ -378,10 +378,10 @@ export function BehindTheLens() {
           <div className="pt-2 sm:pt-4">
             <a
               href="#contact"
-              className="oct-btn oct-btn-dark inline-flex items-center justify-center rounded-full uppercase tracking-[0.2em] text-[11px] sm:text-[12px] px-8 py-3.5 font-medium cursor-pointer"
+              className="inline-flex items-center justify-center rounded-full uppercase tracking-[0.2em] text-[11px] sm:text-[12px] px-8 py-3.5 font-medium transition-all duration-300 text-[#30231D] border border-[#30231D]/30 hover:bg-[#30231D] hover:text-[#F3EADF] hover:border-[#30231D]"
               style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
             >
-              <span className="oct-btn-content">Let&apos;s Collaborate</span>
+              <span>Let&apos;s Collaborate</span>
             </a>
           </div>
         </div>

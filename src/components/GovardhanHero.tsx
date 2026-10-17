@@ -126,6 +126,7 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
   const scaleRef = useRef(0.8);
   const opacityRef = useRef(0);
   const isIntroCompleteRef = useRef(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [connectOpen, setConnectOpen] = useState(false);
 
@@ -241,11 +242,20 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
 
   return (
     <>
+      {/* CTA-hover full hero background transition (#F3EADF -> #B9784E) */}
+      <div
+        className="fixed inset-0 pointer-events-none transition-colors duration-700 ease-out"
+        style={{
+          zIndex: -10,
+          backgroundColor: isHovered ? "#B9784E" : "#F3EADF",
+        }}
+      />
+
       <div ref={containerRef} className="relative" style={{ height: "250vh" }}>
         <div
-          className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden"
+          className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden transition-colors duration-700 ease-out"
           style={{
-            backgroundColor: "#F3EADF",
+            backgroundColor: isHovered ? "#B9784E" : "#F3EADF",
           }}
         >
           {/* 3D Scattered Images on scroll - Exactly as Govardhan Art */}
@@ -309,11 +319,12 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
                 <h1
                   className="text-[clamp(2.5rem,7vw,5.5rem)] font-light tracking-[0.06em] leading-[1.0] text-balance select-none"
                   style={{
-                    color: "#FFFFFF",
+                    color: isHovered ? "#30231D" : "#FFFFFF",
                     fontFamily: '"Cormorant Garamond", "Libre Baskerville", Georgia, serif',
                     letterSpacing: "0.08em",
                     fontVariantLigatures: "common-ligatures discretionary-ligatures",
-                    mixBlendMode: "difference",
+                    mixBlendMode: isHovered ? "normal" : "difference",
+                    transition: "color 0.5s ease",
                   }}
                 >
                   <span style={{ fontStyle: "italic", fontWeight: 400, marginRight: "0.02em" }}>O</span>
@@ -379,19 +390,28 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
                 Stories Told Through Light &amp; Feeling
               </h5>
 
-              {/* CTA: LET'S CREATE with high-contrast animated fill button */}
+              {/* CTA: LET'S CREATE with high-contrast text and border */}
               <button
                 type="button"
-                onClick={() => {
-                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="oct-btn oct-btn-dark rounded-full uppercase tracking-[1.85px] text-[13px] lg:text-[14px] px-[36px] py-[18px] lg:px-[40px] lg:py-[20px] leading-[120%] font-medium cursor-pointer"
+                onClick={() => setConnectOpen(true)}
+                className="rounded-full uppercase tracking-[1.85px] text-[13px] lg:text-[14px] px-[36px] py-[18px] lg:px-[40px] lg:py-[20px] leading-[120%] font-medium transition-all duration-300 cursor-pointer"
                 style={{
+                  color: isHovered ? "#F3EADF" : "#30231D",
+                  boxShadow: isHovered
+                    ? "inset 0 0 0 40px #30231D"
+                    : "inset 0 0 0 2px #30231D",
                   fontFamily: '"DM Sans", system-ui, sans-serif',
+                  backgroundColor: "transparent",
+                  border: "none",
+                  textDecoration: "none",
+                  display: "inline-flex",
+                  alignItems: "center",
                   letterSpacing: "0.16em",
                 }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
               >
-                <span className="oct-btn-content">LET&apos;S CREATE</span>
+                <span>LET&apos;S CREATE</span>
               </button>
             </motion.div>
           </div>

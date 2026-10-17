@@ -237,10 +237,10 @@ export function OctoberJournal() {
             href={INSTAGRAM_PROFILE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="oct-btn oct-btn-dark px-8 py-3.5 rounded-full text-xs uppercase tracking-[0.22em] font-medium cursor-pointer"
+            className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-[#30231D]/25 text-xs uppercase tracking-[0.22em] text-[#30231D] font-medium hover:bg-[#30231D] hover:text-[#F3EADF] hover:border-[#30231D] transition-all duration-300"
             style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
           >
-            <span className="oct-btn-content">Follow along on Instagram</span>
+            <span>Follow along on Instagram</span>
           </a>
         </div>
       </div>
