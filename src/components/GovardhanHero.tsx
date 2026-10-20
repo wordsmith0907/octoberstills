@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
+import gsap from "gsap";
 import {
   motion,
   useScroll,
@@ -8,6 +9,10 @@ import {
   useMotionValueEvent,
   AnimatePresence,
 } from "framer-motion";
+import {
+  updateNavbarTheme,
+  getCurrentScrollBackgroundColor,
+} from "./BackgroundColorTransitions";
 
 // Exact 12 items matrix from Govardhan Art
 const GOVARDHAN_ITEMS = [
@@ -126,8 +131,72 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
   const scaleRef = useRef(0.8);
   const opacityRef = useRef(0);
   const isIntroCompleteRef = useRef(false);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const isCtaHoveredRef = useRef(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [connectOpen, setConnectOpen] = useState(false);
+
+  // Smooth page-wide background color transition on hero CTA hover (#F3EADF -> #B9784E)
+  const handleCtaHoverStart = useCallback(() => {
+    if (typeof window === "undefined") return;
+    // Prevent sticky hover states on touch devices
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+    isCtaHoveredRef.current = true;
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const duration = prefersReduced ? 0 : 0.6;
+
+    const pageContainer = document.getElementById("page-container");
+    const quote = document.getElementById("quote");
+    const targets = [stickyRef.current, pageContainer, quote, document.body].filter(Boolean) as HTMLElement[];
+
+    gsap.killTweensOf(targets);
+    gsap.to(targets, {
+      backgroundColor: "#B9784E",
+      duration,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
+    updateNavbarTheme("#B9784E");
+  }, []);
+
+  const handleCtaHoverEnd = useCallback(() => {
+    if (!isCtaHoveredRef.current) return;
+    isCtaHoveredRef.current = false;
+
+    if (typeof window === "undefined") return;
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const duration = prefersReduced ? 0 : 0.6;
+
+    const pageContainer = document.getElementById("page-container");
+    const quote = document.getElementById("quote");
+    const targets = [stickyRef.current, pageContainer, quote, document.body].filter(Boolean) as HTMLElement[];
+
+    const returnColor = getCurrentScrollBackgroundColor();
+
+    gsap.killTweensOf(targets);
+    gsap.to(targets, {
+      backgroundColor: returnColor,
+      duration,
+      ease: "power2.out",
+      overwrite: "auto",
+      onComplete: () => {
+        if (stickyRef.current) {
+          stickyRef.current.style.backgroundColor = returnColor;
+        }
+      },
+    });
+    updateNavbarTheme(returnColor);
+  }, []);
+
+  // Cleanup on unmount if component unmounts while hovered
+  useEffect(() => {
+    return () => {
+      if (isCtaHoveredRef.current) {
+        handleCtaHoverEnd();
+      }
+    };
+  }, [handleCtaHoverEnd]);
 
   // Word cycling index
   const [wordIndex, setWordIndex] = useState(0);
@@ -162,7 +231,11 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
   // Exact Govardhan Art scroll disappearance trigger
   // Collapses when scrolling down, reverses back to expanded state when returning to top
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    setIsCollapsed(latest > 0.02);
+    const isNowCollapsed = latest > 0.02;
+    setIsCollapsed(isNowCollapsed);
+    if (isNowCollapsed && isCtaHoveredRef.current) {
+      handleCtaHoverEnd();
+    }
   });
 
   const collapsed = gridInView || isCollapsed;
@@ -243,6 +316,7 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
     <>
       <div ref={containerRef} className="relative" style={{ height: "250vh" }}>
         <div
+          ref={stickyRef}
           className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden"
           style={{
             backgroundColor: "#F3EADF",
@@ -383,6 +457,10 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
               <button
                 type="button"
                 onClick={() => setConnectOpen(true)}
+                onMouseEnter={handleCtaHoverStart}
+                onMouseLeave={handleCtaHoverEnd}
+                onFocus={handleCtaHoverStart}
+                onBlur={handleCtaHoverEnd}
                 className="oct-inward-btn oct-inward-btn-dark rounded-full uppercase tracking-[1.85px] text-[13px] lg:text-[14px] px-[36px] py-[18px] lg:px-[40px] lg:py-[20px] leading-[120%] font-medium cursor-pointer"
                 style={{
                   fontFamily: '"DM Sans", system-ui, sans-serif',

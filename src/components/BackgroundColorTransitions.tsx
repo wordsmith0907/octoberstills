@@ -73,6 +73,32 @@ export function updateNavbarTheme(bgColor: string) {
   }
 }
 
+export function getCurrentScrollBackgroundColor(): string {
+  if (typeof window === "undefined") return "#F3EADF";
+  if (window.scrollY < 150) return "#F3EADF";
+  const workDesktop = document.getElementById("work");
+  const workMobile = document.getElementById("work-mobile");
+  const sections = [
+    { el: document.getElementById("footer"), color: "#30231D" },
+    { el: document.getElementById("contact"), color: "#30231D" },
+    { el: document.getElementById("journal"), color: "#F3EADF" },
+    { el: document.getElementById("testimonials"), color: "#F3EADF" },
+    { el: document.getElementById("about"), color: "#F3EADF" },
+    { el: document.getElementById("services"), color: "#D5B99C" },
+    { el: window.innerWidth < 768 ? workMobile : workDesktop, color: "#30231D" },
+    { el: document.getElementById("quote"), color: "#F3EADF" },
+  ];
+
+  for (const sec of sections) {
+    if (!sec.el) continue;
+    const rect = sec.el.getBoundingClientRect();
+    if (rect.top <= 80 && rect.bottom > 0) {
+      return sec.color;
+    }
+  }
+  return "#F3EADF";
+}
+
 export function BackgroundColorTransitions() {
   useEffect(() => {
     // Respect user's motion preference
@@ -114,26 +140,8 @@ export function BackgroundColorTransitions() {
 
     // Immediate scroll-based navbar theme synchronization
     const syncCurrentScrollTheme = () => {
-      const sections = [
-        { el: document.getElementById("footer"), color: "#30231D" },
-        { el: document.getElementById("contact"), color: "#30231D" },
-        { el: document.getElementById("journal"), color: "#F3EADF" },
-        { el: document.getElementById("testimonials"), color: "#F3EADF" },
-        { el: document.getElementById("about"), color: "#F3EADF" },
-        { el: document.getElementById("services"), color: "#D5B99C" },
-        { el: window.innerWidth < 768 ? workMobile : workDesktop, color: "#30231D" },
-        { el: document.getElementById("quote"), color: "#F3EADF" },
-      ];
-
-      for (const sec of sections) {
-        if (!sec.el) continue;
-        const rect = sec.el.getBoundingClientRect();
-        if (rect.top <= 80 && rect.bottom > 0) {
-          updateNavbarTheme(sec.color);
-          return;
-        }
-      }
-      updateNavbarTheme("#F3EADF");
+      const color = getCurrentScrollBackgroundColor();
+      updateNavbarTheme(color);
     };
 
     syncCurrentScrollTheme();
