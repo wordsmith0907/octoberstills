@@ -133,6 +133,7 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
   const isIntroCompleteRef = useRef(false);
   const stickyRef = useRef<HTMLDivElement>(null);
   const isCtaHoveredRef = useRef(false);
+  const [isCtaHovered, setIsCtaHovered] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [connectOpen, setConnectOpen] = useState(false);
 
@@ -143,6 +144,7 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
     if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
 
     isCtaHoveredRef.current = true;
+    setIsCtaHovered(true);
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const duration = prefersReduced ? 0 : 0.6;
 
@@ -163,6 +165,7 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
   const handleCtaHoverEnd = useCallback(() => {
     if (!isCtaHoveredRef.current) return;
     isCtaHoveredRef.current = false;
+    setIsCtaHovered(false);
 
     if (typeof window === "undefined") return;
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -381,13 +384,13 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
             >
               <div className="w-[90vw] max-w-[90vw] lg:max-w-[850px] flex items-center justify-center py-[2vw]">
                 <h1
-                  className="text-[clamp(2.5rem,7vw,5.5rem)] font-light tracking-[0.06em] leading-[1.0] text-balance select-none"
+                  className="text-[clamp(2.5rem,7vw,5.5rem)] font-light tracking-[0.06em] leading-[1.0] text-balance select-none transition-colors duration-500 ease-out"
                   style={{
-                    color: "#FFFFFF",
+                    color: isCtaHovered ? "#F3EADF" : "#FFFFFF",
                     fontFamily: '"Cormorant Garamond", "Libre Baskerville", Georgia, serif',
                     letterSpacing: "0.08em",
                     fontVariantLigatures: "common-ligatures discretionary-ligatures",
-                    mixBlendMode: "difference",
+                    mixBlendMode: isCtaHovered ? "normal" : "difference",
                   }}
                 >
                   <span style={{ fontStyle: "italic", fontWeight: 400, marginRight: "0.02em" }}>O</span>
@@ -413,10 +416,23 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
             >
               {/* Thin Divider Line */}
               <div
-                className="flex items-center justify-center mt-[14px] mb-[22px] md:mb-[26px] lg:mb-[32px]"
-                style={{ width: 54, height: 1, backgroundColor: "rgba(48, 35, 29, 0.25)" }}
+                className="flex items-center justify-center mt-[14px] mb-[22px] md:mb-[26px] lg:mb-[32px] transition-colors duration-500 ease-out"
+                style={{
+                  width: 54,
+                  height: 1,
+                  backgroundColor: isCtaHovered
+                    ? "rgba(243, 234, 223, 0.35)"
+                    : "rgba(48, 35, 29, 0.25)",
+                }}
               >
-                <div style={{ width: 12, height: 1, backgroundColor: "#30231D" }} />
+                <div
+                  className="transition-colors duration-500 ease-out"
+                  style={{
+                    width: 12,
+                    height: 1,
+                    backgroundColor: isCtaHovered ? "#F3EADF" : "#30231D",
+                  }}
+                />
               </div>
 
               {/* Animated / Changing word: PHOTOGRAPHY, FILMS, CREATIVE DIRECTION, UGC */}
@@ -428,11 +444,11 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -22, opacity: 0 }}
                     transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
-                    className="text-[12px] md:text-[13px] tracking-[0.24em] uppercase font-medium select-none"
+                    className="text-[12px] md:text-[13px] tracking-[0.24em] uppercase font-medium select-none transition-colors duration-500 ease-out"
                     style={{
-                      color: "#30231D",
+                      color: isCtaHovered ? "#F3EADF" : "#30231D",
                       fontFamily: '"DM Sans", system-ui, sans-serif',
-                      opacity: 0.85,
+                      opacity: isCtaHovered ? 0.95 : 0.85,
                     }}
                   >
                     {HERO_WORDS[wordIndex]}
@@ -442,12 +458,12 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
 
               {/* Subheading: STORIES TOLD THROUGH LIGHT & FEELING */}
               <h5
-                className="uppercase mb-[26px] md:mb-[30px] lg:mb-[36px] max-w-[420px] md:max-w-[480px] lg:max-w-[540px] text-[15px] md:text-[17px] lg:text-[19px] font-normal leading-[135%] select-none"
+                className="uppercase mb-[26px] md:mb-[30px] lg:mb-[36px] max-w-[420px] md:max-w-[480px] lg:max-w-[540px] text-[15px] md:text-[17px] lg:text-[19px] font-normal leading-[135%] select-none transition-colors duration-500 ease-out"
                 style={{
-                  color: "#30231D",
+                  color: isCtaHovered ? "#F3EADF" : "#30231D",
                   fontFamily: '"DM Sans", system-ui, sans-serif',
                   letterSpacing: "0.08em",
-                  opacity: 0.9,
+                  opacity: isCtaHovered ? 0.95 : 0.9,
                 }}
               >
                 Stories Told Through Light &amp; Feeling
@@ -483,11 +499,22 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
             }}
           >
             <div
-              className="overflow-hidden"
-              style={{ width: 1, height: 26, backgroundColor: "rgba(48, 35, 29, 0.25)" }}
+              className="overflow-hidden transition-colors duration-500 ease-out"
+              style={{
+                width: 1,
+                height: 26,
+                backgroundColor: isCtaHovered
+                  ? "rgba(243, 234, 223, 0.35)"
+                  : "rgba(48, 35, 29, 0.25)",
+              }}
             >
               <motion.div
-                style={{ width: 1, height: 26, backgroundColor: "#30231D" }}
+                className="transition-colors duration-500 ease-out"
+                style={{
+                  width: 1,
+                  height: 26,
+                  backgroundColor: isCtaHovered ? "#F3EADF" : "#30231D",
+                }}
                 animate={{ y: ["-100%", "-100%", "100%", "-120%"] }}
                 transition={{
                   duration: 2.1,
@@ -499,19 +526,25 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
               />
             </div>
             <motion.span
-              className="mt-3 text-[13px] uppercase font-medium leading-[120%]"
+              className="mt-3 text-[13px] uppercase font-medium leading-[120%] transition-colors duration-500 ease-out"
               style={{
                 letterSpacing: "1.85px",
                 fontFamily: '"DM Sans", system-ui, sans-serif',
+                color: isCtaHovered ? "#F3EADF" : undefined,
+                opacity: isCtaHovered ? 0.9 : undefined,
               }}
-              animate={{
-                color: [
-                  "rgba(48,35,29,0.4)",
-                  "rgba(48,35,29,0.4)",
-                  "rgba(48,35,29,1)",
-                  "rgba(48,35,29,0.4)",
-                ],
-              }}
+              animate={
+                isCtaHovered
+                  ? undefined
+                  : {
+                      color: [
+                        "rgba(48,35,29,0.4)",
+                        "rgba(48,35,29,0.4)",
+                        "rgba(48,35,29,1)",
+                        "rgba(48,35,29,0.4)",
+                      ],
+                    }
+              }
               transition={{
                 duration: 2.1,
                 times: [0, 0.33, 0.66, 0.67],

@@ -136,18 +136,17 @@
   background: transparent !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  mix-blend-mode: difference;
-  color: #FFFFFF !important;
+  color: var(--navbar-text-color, #30231D) !important;
   pointer-events: none;
-  transition: padding 0.3s ease;
+  transition: padding 0.3s ease, color 0.5s ease;
 }
 
 .header-wordmark,
 .header-nav-link,
 .header-mobile-toggle {
   pointer-events: auto;
-  color: #FFFFFF !important;
-  mix-blend-mode: difference;
+  color: var(--navbar-text-color, #30231D) !important;
+  transition: color 0.5s ease, opacity 0.2s ease;
 }
 
 .header-wordmark {
@@ -157,9 +156,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
-  color: #FFFFFF !important;
   font-variant-ligatures: common-ligatures discretionary-ligatures;
-  transition: opacity 0.2s ease;
 }
 
 .header-wordmark:hover {
@@ -178,9 +175,7 @@
   letter-spacing: 0.22em;
   text-transform: uppercase;
   text-decoration: none;
-  color: #FFFFFF !important;
   opacity: 0.9;
-  transition: opacity 0.2s ease;
 }
 
 .header-nav-link:hover {
@@ -203,8 +198,8 @@
   display: block;
   width: 24px;
   height: 1.5px;
-  background-color: #FFFFFF !important;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  background-color: var(--navbar-text-color, #30231D) !important;
+  transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.5s ease;
 }
 
 .adaptive-header.mobile-menu-active .hamburger-line,

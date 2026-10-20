@@ -57,7 +57,7 @@ export function updateNavbarTheme(bgColor: string) {
   const [r, g, b] = parseRgb(bgColor);
   const lum = getLuminance(r, g, b);
 
-  const isDarkBg = lum < 0.20;
+  const isDarkBg = lum < 0.35 || bgColor.toLowerCase() === "#b9784e";
   const textColor = isDarkBg ? "#F3EADF" : "#30231D";
   const textShadow = isDarkBg
     ? "0 1px 3px rgba(48, 35, 29, 0.45), 0 0 1px rgba(0, 0, 0, 0.3)"
