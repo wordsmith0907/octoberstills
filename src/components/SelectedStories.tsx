@@ -434,7 +434,7 @@ export function SelectedStories() {
           Desktop & Tablet Horizontal Pinned Track (>= 768px)
           ========================================================================= */}
       <section
-        className="sw-section"
+        className="sw-section scroll-mt-20 md:scroll-mt-24"
         id="work"
         ref={sectionRef}
         aria-labelledby="sw-heading"

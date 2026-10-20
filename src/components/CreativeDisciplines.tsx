@@ -44,7 +44,7 @@ export function CreativeDisciplines() {
   return (
     <section
       id="services"
-      className="relative w-full py-16 md:py-24 px-6 sm:px-12 md:px-20 lg:px-28 overflow-hidden text-[#30231D]"
+      className="relative w-full py-16 md:py-24 px-6 sm:px-12 md:px-20 lg:px-28 overflow-hidden text-[#30231D] scroll-mt-20 md:scroll-mt-24"
       style={{ backgroundColor: "#D5B99C" }}
       aria-label="Creative Disciplines"
     >
