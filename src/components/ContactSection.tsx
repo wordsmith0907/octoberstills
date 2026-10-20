@@ -63,6 +63,30 @@ export function ContactSection() {
         }}
       />
 
+      {/* Decorative Botanical Twig SVG — Positioned in upper-right outer corner away from form fields, text, and navbar */}
+      <div
+        aria-hidden="true"
+        role="presentation"
+        className="hidden sm:block absolute right-4 md:right-8 lg:right-12 xl:right-16 top-16 md:top-20 lg:top-24 pointer-events-none select-none z-0"
+        style={{
+          transform: "rotate(16deg)",
+          transformOrigin: "top right",
+        }}
+      >
+        <img
+          src="/assets/botanical-twig.svg"
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+          className="h-[210px] sm:h-[240px] md:h-[270px] lg:h-[300px] xl:h-[330px] w-auto max-w-none pointer-events-none select-none"
+          style={{
+            opacity: 0.10, // Calibrated to 10% (within 8–12% target range)
+          }}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
       <div className="max-w-7xl mx-auto relative z-10 space-y-20 md:space-y-28">
         {/* Top Editorial Section Header */}
         <div className="space-y-4 max-w-4xl mx-auto text-center flex flex-col items-center justify-center">
