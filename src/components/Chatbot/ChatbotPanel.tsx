@@ -328,7 +328,7 @@ export function ChatbotPanel({
         {
           role: "assistant",
           content:
-            "I apologize, I'm having difficulty connecting right now. You can email Chaitya directly at octoberstills@gmail.com, or share your details using the on-page contact form.",
+            "I'm having trouble connecting right now. Please try again shortly, or email your project details to octoberstills@gmail.com.",
         },
       ];
       setMessages(errorMessages);

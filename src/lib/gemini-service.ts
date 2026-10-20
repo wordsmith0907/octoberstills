@@ -308,7 +308,7 @@ export async function executeChat(
 
   // 2. Read Gemini API key securely from server environment
   const apiKey = process.env.GEMINI_API_KEY;
-  const modelName = process.env.GEMINI_MODEL || "gemini-3.5-flash";
+  const modelName = process.env.GEMINI_MODEL || "gemini-3.1-flash-lite";
 
   // Graceful fallback if key is unconfigured
   if (!apiKey || apiKey === "placeholder" || apiKey.trim().length === 0) {
@@ -390,9 +390,9 @@ export async function executeChat(
       new Set(
         [
           process.env.GEMINI_MODEL,
-          "gemini-3.5-flash",
-          "gemini-3.5-flash-lite",
           "gemini-3.1-flash-lite",
+          "gemini-3.1-flash-lite-preview",
+          "gemini-3.5-flash-lite",
           "gemini-3.8-flash",
         ].filter(Boolean) as string[]
       )
@@ -402,7 +402,7 @@ export async function executeChat(
 
     for (const activeModel of candidateModels) {
       let attempts = 0;
-      const maxAttempts = 1; // Try once per model to failover rapidly across candidates
+      const maxAttempts = 2; // Allow one fast retry on transient 503/429 spikes
 
       while (attempts < maxAttempts) {
         try {
@@ -423,7 +423,7 @@ export async function executeChat(
           });
 
           const timeoutPromise = new Promise<never>((_, reject) =>
-            setTimeout(() => reject(new Error("Gemini API request timed out after 6000ms")), 6000)
+            setTimeout(() => reject(new Error("Gemini API request timed out after 22000ms")), 22000)
           );
 
           const response = await Promise.race([apiPromise, timeoutPromise]);
@@ -445,15 +445,24 @@ export async function executeChat(
           attempts++;
           const errorMessage = err instanceof Error ? err.message : String(err);
 
-          // If high demand, rate limit, or timeout, immediately try next model
+          // Fast transient backoff if 503 or 429
+          if (attempts < maxAttempts && (errorMessage.includes("503") || errorMessage.includes("429"))) {
+            await new Promise((r) => setTimeout(r, 800));
+            continue;
+          }
+
+          // If unavailable or timed out, move to the next candidate model
           if (
             errorMessage.includes("429") ||
             errorMessage.includes("503") ||
+            errorMessage.includes("404") ||
+            errorMessage.includes("NOT_FOUND") ||
+            errorMessage.includes("not found") ||
             errorMessage.includes("RESOURCE_EXHAUSTED") ||
             errorMessage.includes("UNAVAILABLE") ||
             errorMessage.includes("timed out")
           ) {
-            console.warn(`[Gemini] ${activeModel} busy or timed out (${errorMessage.slice(0, 80)}...), trying next option...`);
+            console.warn(`[Gemini] ${activeModel} unavailable or timed out (${errorMessage.slice(0, 80)}...), trying next option...`);
             break; // Break inner loop to try next model in candidateModels
           }
 
@@ -468,7 +477,7 @@ export async function executeChat(
     if (!responseText) {
       return {
         reply:
-          "I'm temporarily having trouble connecting to the studio assistant service. You can send your project details directly to Chaitya at octoberstills@gmail.com.",
+          "I'm having trouble connecting right now. Please try again shortly, or email your project details to octoberstills@gmail.com.",
         isFallback: true,
         suggestedActions: ["Email Studio Directly", "Use Contact Form"],
       };
@@ -497,9 +506,9 @@ export async function executeChat(
     console.error("[Gemini] Execution failure:", error);
     return {
       reply:
-        "Chaitya's studio reviews all creative inquiries directly. Feel free to leave a project brief here or email octoberstills@gmail.com.",
+        "I'm having trouble connecting right now. Please try again shortly, or email your project details to octoberstills@gmail.com.",
       isFallback: true,
-      suggestedActions: ["Submit Project Brief", "Email Studio Directly"],
+      suggestedActions: ["Email Studio Directly", "Use Contact Form"],
     };
   }
 }

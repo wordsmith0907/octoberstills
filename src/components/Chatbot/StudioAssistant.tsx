@@ -54,29 +54,37 @@ export function StudioAssistant({ visible = true }: StudioAssistantProps) {
           }),
         });
         if (res.ok) {
-          return await res.json();
+          const data = await res.json();
+          if (data && data.reply) {
+            return data;
+          }
         }
-      } catch {
-        // Fallback to TanStack Start createServerFn RPC
-        try {
-          return await chatWithStudioAssistant({
-            data: {
-              messages,
-              currentSection,
-              projectSummary,
-              conversationId,
-            },
-          });
-        } catch (rpcErr) {
-          console.error("[StudioAssistant] RPC fallback error:", rpcErr);
+      } catch (err) {
+        console.warn("[StudioAssistant] REST /api/chat error:", err);
+      }
+
+      // Fallback: TanStack Start createServerFn RPC
+      try {
+        const rpcResult = await chatWithStudioAssistant({
+          data: {
+            messages,
+            currentSection,
+            projectSummary,
+            conversationId,
+          },
+        });
+        if (rpcResult && rpcResult.reply) {
+          return rpcResult;
         }
+      } catch (rpcErr) {
+        console.error("[StudioAssistant] RPC fallback error:", rpcErr);
       }
 
       return {
         reply:
-          "Welcome to Oktober Notes. Chaitya's studio reviews all creative inquiries directly. Feel free to leave a project brief here or email octoberstills@gmail.com.",
+          "I'm having trouble connecting right now. Please try again shortly, or email your project details to octoberstills@gmail.com.",
         isFallback: true,
-        suggestedActions: ["Explore the work", "Discuss a project", "Ask a question"],
+        suggestedActions: ["Email Studio Directly", "Use Contact Form"],
       };
     },
     [currentSection]
@@ -94,15 +102,17 @@ export function StudioAssistant({ visible = true }: StudioAssistantProps) {
         if (res.ok) {
           return await res.json();
         }
-      } catch {
-        // Fallback to TanStack Start createServerFn RPC
-        try {
-          return await submitStudioInquiry({
-            data: { ...payload, sourceSection: currentSection },
-          });
-        } catch (rpcErr) {
-          console.error("[StudioAssistant] Inquiry RPC error:", rpcErr);
-        }
+      } catch (err) {
+        console.warn("[StudioAssistant] REST /api/inquiry error:", err);
+      }
+
+      // Fallback to TanStack Start createServerFn RPC
+      try {
+        return await submitStudioInquiry({
+          data: { ...payload, sourceSection: currentSection },
+        });
+      } catch (rpcErr) {
+        console.error("[StudioAssistant] Inquiry RPC error:", rpcErr);
       }
 
       return {
