@@ -94,14 +94,13 @@ function JournalCard({ post, index }: JournalCardProps) {
         {/* Subtle Bottom Gradient for Caption Readability */}
         <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/80 via-black/35 to-transparent pointer-events-none" />
 
-        {/* Small Elegant Instagram Destination Icon Overlay (Top-Right) */}
-        <div className="absolute top-3 right-3 z-10 flex items-center justify-center">
-          <div
-            className="w-7 h-7 rounded-full bg-black/45 backdrop-blur-xs text-[#F3EADF]/85 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#B9784E] group-hover:text-[#F3EADF] group-hover:border-[#B9784E]"
-            title="Open on Instagram"
-          >
-            <Instagram className="w-3.5 h-3.5" />
-          </div>
+        {/* Centered Instagram Icon with Translucent Dark Overlay on Hover */}
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/30 opacity-0 transition-opacity duration-400 ease-out group-hover:opacity-100 group-focus-visible:opacity-100 pointer-events-none">
+          <Instagram
+            className="w-[52px] h-[52px] text-[#F3EADF] drop-shadow-md transform scale-[0.65] transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-100 group-focus-visible:scale-100"
+            strokeWidth={1.5}
+            aria-hidden="true"
+          />
         </div>
 
         {/* Editorial Caption / Context Inset (Bottom) */}
