@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ABOUT_POLAROIDS, type PolaroidItem } from "../data/aboutPolaroids";
-import { AutumnBotanicalWatermark } from "./AutumnBotanicalWatermark";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -311,10 +310,28 @@ export function BehindTheLens() {
       style={{ backgroundColor: "#F3EADF" }}
       aria-label="Behind the Lens — Chaitya Shah Biography"
     >
-      {/* Editorial Autumn Botanical Watermark — Delicate vintage dried leaf illustration */}
-      <AutumnBotanicalWatermark
-        className="hidden md:block absolute -right-16 lg:-right-12 xl:-right-6 top-1/2 -translate-y-1/2 w-[300px] md:w-[340px] lg:w-[400px] xl:w-[440px] opacity-[0.045] pointer-events-none select-none z-0"
-      />
+      {/* Subtle Autumn Botanical Leaf Shadow — Preserved transparent PNG asset */}
+      <div
+        aria-hidden="true"
+        role="presentation"
+        className="hidden md:block absolute -right-10 lg:-right-14 -bottom-12 lg:-bottom-16 pointer-events-none select-none z-0"
+      >
+        <img
+          src="/assets/autumn-leaf.png"
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+          className="h-[280px] md:h-[300px] lg:h-[320px] w-auto max-w-none pointer-events-none select-none"
+          style={{
+            transform: "rotate(-20deg)",
+            transformOrigin: "bottom right",
+            opacity: 0.08,
+            mixBlendMode: "multiply",
+          }}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
 
       <div
         ref={polaroidsContainerRef}
