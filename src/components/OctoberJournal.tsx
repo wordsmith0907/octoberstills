@@ -178,8 +178,7 @@ export function OctoberJournal() {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-[#30231D]/15">
           <div className="space-y-2 text-left">
-            <div className="flex items-center gap-2.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#B9784E]" />
+            <div>
               <span
                 className="text-[11px] md:text-[12px] uppercase font-medium tracking-[0.28em] text-[#30231D]/80"
                 style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}

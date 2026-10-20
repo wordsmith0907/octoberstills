@@ -90,8 +90,7 @@ export function ContactSection() {
       <div className="max-w-7xl mx-auto relative z-10 space-y-20 md:space-y-28">
         {/* Top Editorial Section Header */}
         <div className="space-y-4 max-w-4xl mx-auto text-center flex flex-col items-center justify-center">
-          <div className="flex items-center justify-center gap-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#B9784E]" />
+          <div>
             <span
               className="text-[11px] md:text-[12px] uppercase font-medium tracking-[0.28em] text-[#D5B99C]"
               style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}

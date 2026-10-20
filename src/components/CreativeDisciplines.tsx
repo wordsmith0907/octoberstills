@@ -51,8 +51,7 @@ export function CreativeDisciplines() {
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="flex flex-col items-center justify-center text-center space-y-3 max-w-2xl mx-auto pb-8 md:pb-10 border-b border-[#30231D]/15">
-          <div className="flex items-center justify-center gap-2.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#B9784E]" />
+          <div>
             <span
               className="text-[11px] md:text-[12px] uppercase font-medium tracking-[0.28em] text-[#30231D]/75"
               style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}

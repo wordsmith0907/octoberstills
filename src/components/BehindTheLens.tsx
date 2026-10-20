@@ -364,8 +364,7 @@ export function BehindTheLens() {
           className="relative z-10 max-w-xl mx-auto text-center space-y-6 md:space-y-7 pointer-events-auto px-4"
         >
           {/* Eyebrow */}
-          <div className="flex items-center justify-center gap-2.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#B9784E]" />
+          <div>
             <span
               className="text-[11px] md:text-[12px] uppercase font-medium tracking-[0.28em] text-[#30231D]/80"
               style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}

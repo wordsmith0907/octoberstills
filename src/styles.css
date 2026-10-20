@@ -501,13 +501,19 @@
 }
 
 .sw-eyebrow {
-  font-size: 0.6875rem;
-  letter-spacing: 0.32em;
+  font-size: 11px;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--muted-foreground);
   font-weight: 500;
   margin: 0 0 16px 0;
   text-align: center;
+}
+
+@media (min-width: 768px) {
+  .sw-eyebrow {
+    font-size: 12px;
+  }
 }
 
 .sw-heading {
