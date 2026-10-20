@@ -207,8 +207,8 @@ export function SelectedStories() {
 
     const lastCard = cards[cards.length - 1];
     const trackStyle = window.getComputedStyle(track);
-    const cardGap = parseFloat(trackStyle.gap || trackStyle.columnGap) || 0;
-    const trailingSpacing = cardGap * 0.5;
+    const paddingRight = parseFloat(trackStyle.paddingRight) || parseFloat(trackStyle.paddingLeft) || 48;
+    const trailingSpacing = paddingRight;
     const containerWidth = track.parentElement ? track.parentElement.clientWidth : window.innerWidth;
 
     const currentTransformMatch = track.style.transform.match(/translate3d\(([-0-9.]+)px/);

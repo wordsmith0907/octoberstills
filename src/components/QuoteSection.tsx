@@ -118,12 +118,12 @@ export function QuoteSection() {
           ))}
         </blockquote>
 
-        {/* 3. Subtle editorial attribution matching reference ~ RITESH */}
+        {/* 3. Subtle editorial attribution */}
         <cite
           className="block mt-10 md:mt-14 text-[13px] md:text-[15px] tracking-[0.2em] uppercase font-medium not-italic text-[#30231D]/60 select-none"
           style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
         >
-          ~ CHAITIYA
+          ~ CHAITYA SHAH
         </cite>
       </div>
     </section>

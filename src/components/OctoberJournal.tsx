@@ -16,10 +16,6 @@ function JournalCard({ post, index }: JournalCardProps) {
   const [videoError, setVideoError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const hasVideo = Boolean(post.videoPreview) && !videoError;
-
-  // Stagger: alternate cards sit 24px lower on desktop
-  const isStaggered = index % 2 === 1;
-
   const handleMouseEnter = () => {
     if (!hasVideo || !videoRef.current) return;
     videoRef.current.currentTime = 0;
@@ -28,7 +24,6 @@ function JournalCard({ post, index }: JournalCardProps) {
       playPromise
         .then(() => setIsPlaying(true))
         .catch(() => {
-          // Autoplay policy or video loading blocked
           setIsPlaying(false);
         });
     }
@@ -41,10 +36,8 @@ function JournalCard({ post, index }: JournalCardProps) {
     videoRef.current.currentTime = 0;
   };
 
-  // Mobile tap handler: toggles video playback on touchscreens; image-only opens link
   const handleMobileCardClick = (e: React.MouseEvent) => {
-    if (!hasVideo) return; // Native <a> handles navigation for image-only posts
-    // Check if on touch device / mobile width
+    if (!hasVideo) return;
     if (window.innerWidth < 768) {
       e.preventDefault();
       if (videoRef.current) {
@@ -62,9 +55,7 @@ function JournalCard({ post, index }: JournalCardProps) {
   };
 
   return (
-    <div
-      className={`w-full ${isStaggered ? "md:translate-y-6" : "md:translate-y-0"} transition-transform duration-500`}
-    >
+    <div className="w-full">
       <a
         href={post.instagramUrl}
         target="_blank"

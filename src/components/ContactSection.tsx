@@ -120,7 +120,7 @@ export function ContactSection() {
                   className="text-[15px] text-[#F3EADF]/80 leading-relaxed"
                   style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
                 >
-                  Your message has been received. Chaitiya personally reviews all project inquiries
+                  Your message has been received. Chaitya personally reviews all project inquiries
                   and will respond within 24 to 48 hours.
                 </p>
                 <div className="pt-4">
@@ -159,13 +159,20 @@ export function ContactSection() {
                       id="contact-name"
                       type="text"
                       required
+                      aria-invalid={Boolean(errors.name)}
+                      aria-describedby={errors.name ? "name-error" : undefined}
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, name: e.target.value });
+                        if (errors.name) setErrors({ ...errors, name: "" });
+                      }}
                       placeholder="Jane Doe"
-                      className="w-full bg-[#F3EADF]/[0.04] border border-[#F3EADF]/20 rounded-sm px-4 py-3.5 text-[#F3EADF] placeholder-[#F3EADF]/30 focus:outline-none focus:border-[#D5B99C] transition-colors text-[14px]"
+                      className={`w-full bg-[#F3EADF]/[0.04] border rounded-sm px-4 py-3.5 text-[#F3EADF] placeholder-[#F3EADF]/30 focus:outline-none focus:border-[#D5B99C] focus-visible:ring-1 focus-visible:ring-[#D5B99C] transition-colors text-[14px] ${
+                        errors.name ? "border-red-400/60" : "border-[#F3EADF]/20"
+                      }`}
                     />
                     {errors.name && (
-                      <p className="text-[12px] text-red-300 tracking-wide">{errors.name}</p>
+                      <p id="name-error" className="text-[12px] text-red-300 tracking-wide">{errors.name}</p>
                     )}
                   </div>
 
@@ -182,13 +189,20 @@ export function ContactSection() {
                       id="contact-email"
                       type="email"
                       required
+                      aria-invalid={Boolean(errors.email)}
+                      aria-describedby={errors.email ? "email-error" : undefined}
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, email: e.target.value });
+                        if (errors.email) setErrors({ ...errors, email: "" });
+                      }}
                       placeholder="jane@studio.com"
-                      className="w-full bg-[#F3EADF]/[0.04] border border-[#F3EADF]/20 rounded-sm px-4 py-3.5 text-[#F3EADF] placeholder-[#F3EADF]/30 focus:outline-none focus:border-[#D5B99C] transition-colors text-[14px]"
+                      className={`w-full bg-[#F3EADF]/[0.04] border rounded-sm px-4 py-3.5 text-[#F3EADF] placeholder-[#F3EADF]/30 focus:outline-none focus:border-[#D5B99C] focus-visible:ring-1 focus-visible:ring-[#D5B99C] transition-colors text-[14px] ${
+                        errors.email ? "border-red-400/60" : "border-[#F3EADF]/20"
+                      }`}
                     />
                     {errors.email && (
-                      <p className="text-[12px] text-red-300 tracking-wide">{errors.email}</p>
+                      <p id="email-error" className="text-[12px] text-red-300 tracking-wide">{errors.email}</p>
                     )}
                   </div>
                 </div>
@@ -209,7 +223,7 @@ export function ContactSection() {
                       value={formData.brand}
                       onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
                       placeholder="Brand Name"
-                      className="w-full bg-[#F3EADF]/[0.04] border border-[#F3EADF]/20 rounded-sm px-4 py-3.5 text-[#F3EADF] placeholder-[#F3EADF]/30 focus:outline-none focus:border-[#D5B99C] transition-colors text-[14px]"
+                      className="w-full bg-[#F3EADF]/[0.04] border border-[#F3EADF]/20 rounded-sm px-4 py-3.5 text-[#F3EADF] placeholder-[#F3EADF]/30 focus:outline-none focus:border-[#D5B99C] focus-visible:ring-1 focus-visible:ring-[#D5B99C] transition-colors text-[14px]"
                     />
                   </div>
 
@@ -226,7 +240,7 @@ export function ContactSection() {
                       id="contact-type"
                       value={formData.projectType}
                       onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
-                      className="w-full bg-[#30231D] border border-[#F3EADF]/20 rounded-sm px-4 py-3.5 text-[#F3EADF] focus:outline-none focus:border-[#D5B99C] transition-colors text-[14px] cursor-pointer"
+                      className="w-full bg-[#30231D] border border-[#F3EADF]/20 rounded-sm px-4 py-3.5 text-[#F3EADF] focus:outline-none focus:border-[#D5B99C] focus-visible:ring-1 focus-visible:ring-[#D5B99C] transition-colors text-[14px] cursor-pointer"
                     >
                       <option value="Photography">Photography (Editorial / Hospitality)</option>
                       <option value="Film">Films &amp; Cinematography</option>
@@ -250,13 +264,20 @@ export function ContactSection() {
                     id="contact-details"
                     required
                     rows={4}
+                    aria-invalid={Boolean(errors.details)}
+                    aria-describedby={errors.details ? "details-error" : undefined}
                     value={formData.details}
-                    onChange={(e) => setFormData({ ...formData, details: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, details: e.target.value });
+                      if (errors.details) setErrors({ ...errors, details: "" });
+                    }}
                     placeholder="Tell me about your concept, timeline, and ideal deliverables..."
-                    className="w-full bg-[#F3EADF]/[0.04] border border-[#F3EADF]/20 rounded-sm px-4 py-3.5 text-[#F3EADF] placeholder-[#F3EADF]/30 focus:outline-none focus:border-[#D5B99C] transition-colors text-[14px] resize-none"
+                    className={`w-full bg-[#F3EADF]/[0.04] border rounded-sm px-4 py-3.5 text-[#F3EADF] placeholder-[#F3EADF]/30 focus:outline-none focus:border-[#D5B99C] focus-visible:ring-1 focus-visible:ring-[#D5B99C] transition-colors text-[14px] resize-none ${
+                      errors.details ? "border-red-400/60" : "border-[#F3EADF]/20"
+                    }`}
                   />
                   {errors.details && (
-                    <p className="text-[12px] text-red-300 tracking-wide">{errors.details}</p>
+                    <p id="details-error" className="text-[12px] text-red-300 tracking-wide">{errors.details}</p>
                   )}
                 </div>
 

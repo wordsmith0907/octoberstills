@@ -83,10 +83,12 @@ function DraggablePolaroid({
       pointerId: e.pointerId,
     };
 
-    // 6. Capture pointer
-    try {
-      el.setPointerCapture(e.pointerId);
-    } catch {}
+    // 6. Capture pointer for mouse immediately; for touch, capture once intentional drag threshold exceeded
+    if (e.pointerType !== "touch") {
+      try {
+        el.setPointerCapture(e.pointerId);
+      } catch {}
+    }
 
     // 7. Subtle drag lift/scale
     gsap.to(el, {
@@ -103,6 +105,19 @@ function DraggablePolaroid({
 
     const deltaX = e.clientX - state.startX;
     const deltaY = e.clientY - state.startY;
+
+    // On touch devices, if gesture is primarily vertical, release drag so page scrolls smoothly
+    if (e.pointerType === "touch" && Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 8) {
+      state.isDragging = false;
+      setIsDragging(false);
+      return;
+    }
+
+    if (e.pointerType === "touch" && Math.abs(deltaX) > 8 && state.pointerId !== null) {
+      try {
+        cardRef.current.setPointerCapture(state.pointerId);
+      } catch {}
+    }
 
     const newX = state.currentX + deltaX;
     const newY = state.currentY + deltaY;

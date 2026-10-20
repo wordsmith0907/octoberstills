@@ -5,6 +5,7 @@ interface Discipline {
   id: string;
   number: string;
   title: string;
+  subtitle: string;
   mediaType: "image" | "video";
   mediaSrc: string;
   poster?: string;
@@ -15,6 +16,7 @@ const DISCIPLINES: Discipline[] = [
     id: "photography",
     number: "01",
     title: "Photography",
+    subtitle: "Editorial portraiture, campaigns & architectural still life.",
     mediaType: "image",
     mediaSrc: "/portfolio/services_detail.jpg",
   },
@@ -22,6 +24,7 @@ const DISCIPLINES: Discipline[] = [
     id: "cinematography",
     number: "02",
     title: "Films & Cinematography",
+    subtitle: "Atmospheric brand films, motion poems & cinematic direction.",
     mediaType: "video",
     mediaSrc: "/ringview/5.mp4",
     poster: "/ringview/5-poster.jpg",
@@ -30,6 +33,7 @@ const DISCIPLINES: Discipline[] = [
     id: "ugc-content",
     number: "03",
     title: "UGC & Brand Content",
+    subtitle: "Tactile creator storytelling, organic aesthetic & luxury social reels.",
     mediaType: "video",
     mediaSrc: "/ringview/7.mp4",
     poster: "/ringview/7-poster.jpg",
@@ -113,20 +117,29 @@ export function CreativeDisciplines() {
                 </div>
 
                 {/* Number and Title beneath Photograph */}
-                <div className="pt-4 md:pt-5 flex items-baseline gap-3">
-                  <span
-                    className="text-[12px] md:text-[13px] font-medium tracking-[0.22em] text-[#30231D]/60 group-hover:text-[#B9784E] transition-colors duration-300 select-none"
+                <div className="pt-4 md:pt-5 space-y-1.5">
+                  <div className="flex items-baseline gap-3">
+                    <span
+                      className="text-[12px] md:text-[13px] font-medium tracking-[0.22em] text-[#30231D]/60 group-hover:text-[#B9784E] transition-colors duration-300 select-none"
+                      style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
+                    >
+                      {discipline.number}
+                    </span>
+                    <span className="text-[#30231D]/25 font-light select-none">/</span>
+                    <h3
+                      className="text-[clamp(1.4rem,2vw,1.9rem)] font-light text-[#30231D] tracking-tight leading-tight group-hover:text-[#B9784E] transition-colors duration-300"
+                      style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
+                    >
+                      {discipline.title}
+                    </h3>
+                  </div>
+
+                  <p
+                    className="text-[13px] md:text-[14px] text-[#30231D]/70 font-light leading-relaxed pl-8 md:pl-9"
                     style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
                   >
-                    {discipline.number}
-                  </span>
-                  <span className="text-[#30231D]/25 font-light select-none">/</span>
-                  <h3
-                    className="text-[clamp(1.4rem,2vw,1.9rem)] font-light text-[#30231D] tracking-tight leading-tight group-hover:text-[#B9784E] transition-colors duration-300"
-                    style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
-                  >
-                    {discipline.title}
-                  </h3>
+                    {discipline.subtitle}
+                  </p>
                 </div>
               </div>
             </motion.div>
