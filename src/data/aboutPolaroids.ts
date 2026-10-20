@@ -52,9 +52,9 @@ export const ABOUT_POLAROIDS: PolaroidItem[] = [
   },
   {
     id: "polaroid-noir-shadow",
-    image: "/portfolio/bento3.jpg",
+    image: "/selected-work/sw-2-poster.jpg",
     alt: "Sculptural footwear and deep shadow study for Theater collection",
-    caption: "Form & tactile shadow",
+    caption: "Theater · Form & Shadow",
     rotation: 5,
     desktopPosition: {
       bottom: "2%",
@@ -64,9 +64,9 @@ export const ABOUT_POLAROIDS: PolaroidItem[] = [
   },
   {
     id: "polaroid-botanical-ritual",
-    image: "/portfolio/bento2.jpg",
-    alt: "Intimate botanical skincare formulation and morning daylight",
-    caption: "Quiet luxury in light",
+    image: "/hero-images/maison-table.jpg",
+    alt: "Curated culinary still life and editorial table setting for Maison Twenty Seven",
+    caption: "Maison Twenty Seven · Table Study",
     rotation: -6,
     desktopPosition: {
       bottom: "1%",

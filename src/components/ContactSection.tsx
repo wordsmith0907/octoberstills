@@ -357,7 +357,7 @@ export function ContactSection() {
           <div className="lg:col-span-5 space-y-8">
             <div className="relative aspect-[4/5] rounded-sm overflow-hidden bg-[#F3EADF]/10 border border-[#F3EADF]/15">
               <img
-                src="/portfolio/cta_silhouette.jpg"
+                src="/selected-work/sw-3-poster.jpg"
                 alt="Chaitya Shah film camera silhouette during golden hour"
                 className="w-full h-full object-cover"
                 loading="lazy"

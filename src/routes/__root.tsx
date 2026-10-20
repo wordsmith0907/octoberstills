@@ -87,7 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://octoberstills.vercel.app/" },
-      { property: "og:image", content: "https://octoberstills.vercel.app/portfolio/cta_silhouette.jpg" },
+      { property: "og:image", content: "https://octoberstills.vercel.app/selected-work/sw-3-poster.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:creator", content: "@octoberstills" },
       { name: "author", content: "Chaitya Shah" },

@@ -18,7 +18,7 @@ const DISCIPLINES: Discipline[] = [
     title: "Photography",
     subtitle: "Editorial portraiture, campaigns & architectural still life.",
     mediaType: "image",
-    mediaSrc: "/portfolio/services_detail.jpg",
+    mediaSrc: "/hero-images/simons-vertical.jpg",
   },
   {
     id: "cinematography",
