@@ -86,9 +86,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Editorial portfolio of photography, cinematic films, creative direction, and creator-led brand storytelling by Chaitya Shah.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://octoberstills.vercel.app/" },
+      { property: "og:image", content: "https://octoberstills.vercel.app/portfolio/cta_silhouette.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:creator", content: "@octoberstills" },
+      { name: "author", content: "Chaitya Shah" },
+      { name: "theme-color", content: "#30231D" },
     ],
     links: [
+      { rel: "canonical", href: "https://octoberstills.vercel.app/" },
       {
         rel: "stylesheet",
         href: appCss,
@@ -114,11 +120,56 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+const SCHEMA_JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://octoberstills.vercel.app/#person",
+      "name": "Chaitya Shah",
+      "jobTitle": "Creative Director, Cinematographer & Visual Storyteller",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Octoberstills"
+      },
+      "url": "https://octoberstills.vercel.app/",
+      "sameAs": [
+        "https://www.instagram.com/octoberstills/",
+        "https://www.threads.net/@octoberstills",
+        "https://www.linkedin.com/in/chaityashah"
+      ]
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://octoberstills.vercel.app/#organization",
+      "name": "Octoberstills",
+      "founder": {
+        "@id": "https://octoberstills.vercel.app/#person"
+      },
+      "url": "https://octoberstills.vercel.app/",
+      "logo": "https://octoberstills.vercel.app/favicon.svg",
+      "description": "An independent creative practice by Chaitya Shah, crafting stories through photography, films, and creative direction.",
+      "email": "octoberstills@gmail.com",
+      "knowsAbout": [
+        "Editorial Photography",
+        "Cinematography",
+        "Creative Direction",
+        "Creator UGC & Brand Storytelling",
+        "Hospitality Visuals"
+      ]
+    }
+  ]
+};
+
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
         <HeadContent />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA_JSON_LD) }}
+        />
       </head>
       <body>
         {children}

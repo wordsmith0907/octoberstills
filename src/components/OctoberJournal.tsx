@@ -171,7 +171,7 @@ export function OctoberJournal() {
       ref={sectionRef}
       id="journal"
       data-bg="#F3EADF"
-      className="relative w-full pt-20 pb-24 md:pt-28 md:pb-36 px-6 sm:px-12 md:px-16 lg:px-24 overflow-hidden text-[#30231D]"
+      className="relative w-full pt-20 pb-24 md:pt-28 md:pb-36 px-6 sm:px-12 md:px-16 lg:px-24 overflow-hidden text-[#30231D] scroll-mt-20 md:scroll-mt-24"
       style={{ backgroundColor: "#F3EADF" }}
       aria-label="The October Journal — Instagram Diary"
     >

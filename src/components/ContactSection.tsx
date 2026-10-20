@@ -50,7 +50,7 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative w-full py-28 md:py-40 px-6 sm:px-12 md:px-20 lg:px-28 overflow-hidden text-[#F3EADF]"
+      className="relative w-full py-28 md:py-40 px-6 sm:px-12 md:px-20 lg:px-28 overflow-hidden text-[#F3EADF] scroll-mt-20 md:scroll-mt-24"
       style={{ backgroundColor: "#30231D" }}
       aria-label="Contact Finale"
     >
