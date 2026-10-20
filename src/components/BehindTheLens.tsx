@@ -333,6 +333,29 @@ export function BehindTheLens() {
         />
       </div>
 
+      {/* Subtle Autumn Botanical Leaf Shadow — Upper-Left Leaf (Flipped horizontally & vertically) */}
+      <div
+        aria-hidden="true"
+        role="presentation"
+        className="hidden md:block absolute left-8 lg:left-14 xl:left-20 top-8 lg:top-12 xl:top-14 pointer-events-none select-none z-0"
+      >
+        <img
+          src="/assets/autumn-leaf.png"
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+          className="h-[250px] md:h-[270px] lg:h-[295px] w-auto max-w-none pointer-events-none select-none"
+          style={{
+            transform: "scale(-1, -1) rotate(-18deg)",
+            transformOrigin: "center center",
+            opacity: 0.07,
+            mixBlendMode: "multiply",
+          }}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
       <div
         ref={polaroidsContainerRef}
         className="max-w-7xl mx-auto relative min-h-[560px] md:min-h-[620px] lg:min-h-[660px] flex flex-col justify-center items-center"
