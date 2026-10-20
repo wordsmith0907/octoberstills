@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ABOUT_POLAROIDS, type PolaroidItem } from "../data/aboutPolaroids";
+import { AutumnBotanicalWatermark } from "./AutumnBotanicalWatermark";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -310,6 +311,11 @@ export function BehindTheLens() {
       style={{ backgroundColor: "#F3EADF" }}
       aria-label="Behind the Lens — Chaitya Shah Biography"
     >
+      {/* Editorial Autumn Botanical Watermark — Delicate vintage dried leaf illustration */}
+      <AutumnBotanicalWatermark
+        className="hidden md:block absolute -right-16 lg:-right-12 xl:-right-6 top-1/2 -translate-y-1/2 w-[300px] md:w-[340px] lg:w-[400px] xl:w-[440px] opacity-[0.045] pointer-events-none select-none z-0"
+      />
+
       <div
         ref={polaroidsContainerRef}
         className="max-w-7xl mx-auto relative min-h-[560px] md:min-h-[620px] lg:min-h-[660px] flex flex-col justify-center items-center"
