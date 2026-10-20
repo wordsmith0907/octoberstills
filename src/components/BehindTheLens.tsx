@@ -310,21 +310,21 @@ export function BehindTheLens() {
       style={{ backgroundColor: "#F3EADF" }}
       aria-label="Behind the Lens — Chaitya Shah Biography"
     >
-      {/* Subtle Autumn Botanical Leaf Shadow — Preserved transparent PNG asset */}
+      {/* Subtle Autumn Botanical Leaf Shadow — Primary Leaf (Uncropped with complete stem in lower-right) */}
       <div
         aria-hidden="true"
         role="presentation"
-        className="hidden md:block absolute -right-10 lg:-right-14 -bottom-12 lg:-bottom-16 pointer-events-none select-none z-0"
+        className="hidden md:block absolute right-8 lg:right-14 xl:right-20 bottom-8 lg:bottom-12 xl:bottom-14 pointer-events-none select-none z-0"
       >
         <img
           src="/assets/autumn-leaf.png"
           alt=""
           aria-hidden="true"
           draggable={false}
-          className="h-[280px] md:h-[300px] lg:h-[320px] w-auto max-w-none pointer-events-none select-none"
+          className="h-[270px] md:h-[290px] lg:h-[315px] w-auto max-w-none pointer-events-none select-none"
           style={{
-            transform: "rotate(-20deg)",
-            transformOrigin: "bottom right",
+            transform: "rotate(-18deg)",
+            transformOrigin: "center center",
             opacity: 0.08,
             mixBlendMode: "multiply",
           }}
