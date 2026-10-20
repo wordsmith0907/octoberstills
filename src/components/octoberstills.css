@@ -658,7 +658,7 @@
   flex-direction: column;
   flex-shrink: 0;
   gap: 10px;
-  width: calc(clamp(322px, min(54vh, calc((100vw - 120px) * 0.39)), 588px) * 0.8);
+  width: calc(clamp(354px, min(58vh, calc((100vw - 120px) * 0.43)), 646px) * 0.8);
   max-width: 100%;
   display: flex;
   user-select: none;
@@ -677,9 +677,9 @@
   aspect-ratio: 4 / 5;
   cursor: pointer;
   background: rgba(243, 234, 223, 0.05);
-  border-radius: 16px;
+  border-radius: 18px;
   width: 100%;
-  height: clamp(322px, min(54vh, calc((100vw - 120px) * 0.39)), 588px);
+  height: clamp(354px, min(58vh, calc((100vw - 120px) * 0.43)), 646px);
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(243, 234, 223, 0.1);
@@ -886,11 +886,11 @@
     margin-bottom: 20px;
   }
   .sw-card-media {
-    height: clamp(270px, 46vh, 420px);
-    border-radius: 16px;
+    height: clamp(298px, 50vh, 462px);
+    border-radius: 18px;
   }
   .sw-card {
-    width: calc(clamp(270px, 46vh, 420px) * 0.8);
+    width: calc(clamp(298px, 50vh, 462px) * 0.8);
   }
 }
 
@@ -940,7 +940,7 @@
   aspect-ratio: 4 / 5;
   height: auto;
   width: 100%;
-  border-radius: 16px;
+  border-radius: 18px;
 }
 
 /* Lightbox Modal */
