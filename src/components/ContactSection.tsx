@@ -82,8 +82,10 @@ export function ContactSection() {
               fontFamily: '"Cormorant Garamond", "Libre Baskerville", Georgia, serif',
             }}
           >
-            Let&apos;s make something{" "}
-            <span className="font-normal italic text-[#D5B99C]">beautiful.</span>
+            <span className="block">Let&apos;s make</span>
+            <span className="block font-normal italic text-[#D5B99C]">
+              something beautiful.
+            </span>
           </h2>
 
           <p
