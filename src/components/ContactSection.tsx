@@ -265,7 +265,7 @@ export function ContactSection() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="inline-flex items-center justify-center gap-3 rounded-full uppercase tracking-[0.2em] text-[13px] px-10 py-5 font-medium transition-all duration-300 bg-[#F3EADF] text-[#30231D] hover:bg-[#B9784E] hover:text-[#F3EADF] disabled:opacity-50 cursor-pointer"
+                    className="oct-inward-btn oct-inward-btn-light inline-flex items-center justify-center gap-3 rounded-full uppercase tracking-[0.2em] text-[13px] px-10 py-5 font-medium disabled:opacity-50 cursor-pointer"
                     style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
                   >
                     <span>{isSubmitting ? "Sending..." : "Send an Inquiry"}</span>
@@ -285,12 +285,12 @@ export function ContactSection() {
             )}
           </div>
 
-          {/* Right Column: Restrained Photographic Detail & Studio Information (5 cols) */}
+          {/* Right Column: Restrained Photographic Detail (5 cols) */}
           <div className="lg:col-span-5 space-y-8">
             <div className="relative aspect-[4/5] rounded-sm overflow-hidden bg-[#F3EADF]/10 border border-[#F3EADF]/15">
               <img
                 src="/portfolio/cta_silhouette.jpg"
-                alt="Chaitiya Shah film camera silhouette during golden hour"
+                alt="Chaitya Shah film camera silhouette during golden hour"
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
@@ -306,41 +306,6 @@ export function ContactSection() {
                 <div className="text-[11px] uppercase tracking-[0.2em] text-[#D5B99C]">
                   Direct Bookings · Inquiries
                 </div>
-              </div>
-            </div>
-
-            <div className="space-y-4 pt-2 border-t border-[#F3EADF]/15">
-              <div className="flex items-center justify-between text-[13px] text-[#F3EADF]/75">
-                <span className="uppercase tracking-[0.18em] text-[11px] text-[#D5B99C]">
-                  Email
-                </span>
-                <a
-                  href="mailto:octoberstills@gmail.com"
-                  className="hover:text-[#D5B99C] transition-colors"
-                >
-                  octoberstills@gmail.com
-                </a>
-              </div>
-
-              <div className="flex items-center justify-between text-[13px] text-[#F3EADF]/75">
-                <span className="uppercase tracking-[0.18em] text-[11px] text-[#D5B99C]">
-                  Instagram
-                </span>
-                <a
-                  href="https://www.instagram.com/octoberstills/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-[#D5B99C] transition-colors"
-                >
-                  @octoberstills
-                </a>
-              </div>
-
-              <div className="flex items-center justify-between text-[13px] text-[#F3EADF]/75">
-                <span className="uppercase tracking-[0.18em] text-[11px] text-[#D5B99C]">
-                  Representation
-                </span>
-                <span>Independent / Direct</span>
               </div>
             </div>
           </div>
