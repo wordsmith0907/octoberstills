@@ -208,6 +208,25 @@
   background-color: #F3EADF !important;
 }
 
+/* Explicit Header Light / Dark theme overrides for adaptive contrast */
+.adaptive-header.header--light-text .header-wordmark,
+.adaptive-header.header--light-text .header-nav-link {
+  color: #F3EADF !important;
+}
+
+.adaptive-header.header--light-text .hamburger-line {
+  background-color: #F3EADF !important;
+}
+
+.adaptive-header.header--dark-text .header-wordmark,
+.adaptive-header.header--dark-text .header-nav-link {
+  color: #30231D !important;
+}
+
+.adaptive-header.header--dark-text .hamburger-line {
+  background-color: #30231D !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .adaptive-header,
   .header-wordmark,

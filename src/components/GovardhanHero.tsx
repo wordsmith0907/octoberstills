@@ -139,27 +139,29 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
 
   // Smooth page-wide background color transition on hero CTA hover (#F3EADF -> #B9784E)
   const handleCtaHoverStart = useCallback(() => {
-    if (typeof window === "undefined") return;
-    // Prevent sticky hover states on touch devices
-    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-
     isCtaHoveredRef.current = true;
     setIsCtaHovered(true);
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const duration = prefersReduced ? 0 : 0.6;
+
+    if (typeof document === "undefined") return;
 
     const pageContainer = document.getElementById("page-container");
     const quote = document.getElementById("quote");
-    const targets = [stickyRef.current, pageContainer, quote, document.body].filter(Boolean) as HTMLElement[];
+    const targets = [pageContainer, quote, document.body].filter(Boolean) as HTMLElement[];
 
     gsap.killTweensOf(targets);
     gsap.to(targets, {
       backgroundColor: "#B9784E",
-      duration,
+      duration: 0.6,
       ease: "power2.out",
       overwrite: "auto",
     });
-    updateNavbarTheme("#B9784E");
+
+    const header = document.querySelector(".adaptive-header");
+    if (header) {
+      header.classList.add("header--light-text");
+      header.classList.remove("header--dark-text");
+    }
+    document.documentElement.style.setProperty("--navbar-text-color", "#F3EADF");
   }, []);
 
   const handleCtaHoverEnd = useCallback(() => {
@@ -167,29 +169,29 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
     isCtaHoveredRef.current = false;
     setIsCtaHovered(false);
 
-    if (typeof window === "undefined") return;
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const duration = prefersReduced ? 0 : 0.6;
+    if (typeof document === "undefined") return;
 
     const pageContainer = document.getElementById("page-container");
     const quote = document.getElementById("quote");
-    const targets = [stickyRef.current, pageContainer, quote, document.body].filter(Boolean) as HTMLElement[];
+    const targets = [pageContainer, quote, document.body].filter(Boolean) as HTMLElement[];
 
     const returnColor = getCurrentScrollBackgroundColor();
 
     gsap.killTweensOf(targets);
     gsap.to(targets, {
       backgroundColor: returnColor,
-      duration,
+      duration: 0.6,
       ease: "power2.out",
       overwrite: "auto",
-      onComplete: () => {
-        if (stickyRef.current) {
-          stickyRef.current.style.backgroundColor = returnColor;
-        }
-      },
     });
-    updateNavbarTheme(returnColor);
+
+    const isDark = returnColor === "#30231D" || returnColor === "#B9784E";
+    const header = document.querySelector(".adaptive-header");
+    if (header) {
+      header.classList.toggle("header--light-text", isDark);
+      header.classList.toggle("header--dark-text", !isDark);
+    }
+    document.documentElement.style.setProperty("--navbar-text-color", isDark ? "#F3EADF" : "#30231D");
   }, []);
 
   // Cleanup on unmount if component unmounts while hovered
@@ -320,9 +322,11 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
       <div ref={containerRef} className="relative" style={{ height: "250vh" }}>
         <div
           ref={stickyRef}
-          className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden"
+          className={`sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden transition-colors duration-500 ease-out ${
+            isCtaHovered ? "hero-cta-hovered" : ""
+          }`}
           style={{
-            backgroundColor: "#F3EADF",
+            backgroundColor: isCtaHovered ? "#B9784E" : "#F3EADF",
           }}
         >
           {/* 3D Scattered Images on scroll - Exactly as Govardhan Art */}
@@ -386,11 +390,10 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
                 <h1
                   className="text-[clamp(2.5rem,7vw,5.5rem)] font-light tracking-[0.06em] leading-[1.0] text-balance select-none transition-colors duration-500 ease-out"
                   style={{
-                    color: isCtaHovered ? "#F3EADF" : "#FFFFFF",
+                    color: isCtaHovered ? "#F3EADF" : "#30231D",
                     fontFamily: '"Cormorant Garamond", "Libre Baskerville", Georgia, serif',
                     letterSpacing: "0.08em",
                     fontVariantLigatures: "common-ligatures discretionary-ligatures",
-                    mixBlendMode: isCtaHovered ? "normal" : "difference",
                   }}
                 >
                   <span style={{ fontStyle: "italic", fontWeight: 400, marginRight: "0.02em" }}>O</span>
