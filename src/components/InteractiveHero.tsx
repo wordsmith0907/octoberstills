@@ -28,49 +28,49 @@ interface HeroImage {
 const HERO_IMAGES: HeroImage[] = [
   // Top-left area
   {
-    src: "/ringview/0.jpg",
+    src: "/ringview/0.webp",
     alt: "Photography by Chaitiya Shah",
     x: 6, y: 12, w: 220, h: 300, rot: -6, z: 3, depth: 0.03,
   },
   // Top-right area
   {
-    src: "/ringview/2.jpg",
+    src: "/ringview/2.webp",
     alt: "Fashion photography",
     x: 68, y: 8, w: 200, h: 280, rot: 5, z: 5, depth: 0.05,
   },
   // Center-left
   {
-    src: "/ringview/4.jpg",
+    src: "/ringview/4.webp",
     alt: "Lifestyle content",
     x: 2, y: 50, w: 190, h: 260, rot: 4, z: 2, depth: 0.02,
   },
   // Center-right
   {
-    src: "/ringview/6.jpg",
+    src: "/ringview/6.webp",
     alt: "Hospitality photography",
     x: 72, y: 48, w: 210, h: 290, rot: -8, z: 4, depth: 0.04,
   },
   // Bottom-left
   {
-    src: "/ringview/1-poster.jpg",
+    src: "/ringview/1-poster.webp",
     alt: "Creative direction",
     x: 12, y: 72, w: 180, h: 240, rot: 8, z: 6, depth: 0.06,
   },
   // Bottom-right
   {
-    src: "/ringview/3-poster.jpg",
+    src: "/ringview/3-poster.webp",
     alt: "Film production",
     x: 64, y: 74, w: 195, h: 270, rot: -4, z: 7, depth: 0.035,
   },
   // Top-center overlap
   {
-    src: "/ringview/5-poster.jpg",
+    src: "/ringview/5-poster.webp",
     alt: "Fashion editorial",
     x: 34, y: 4, w: 170, h: 230, rot: -3, z: 8, depth: 0.045,
   },
   // Bottom-center
   {
-    src: "/ringview/7-poster.jpg",
+    src: "/ringview/7-poster.webp",
     alt: "Brand campaign",
     x: 38, y: 78, w: 185, h: 250, rot: 6, z: 1, depth: 0.025,
   },

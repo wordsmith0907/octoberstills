@@ -28,7 +28,7 @@ export interface PolaroidItem {
 export const ABOUT_POLAROIDS: PolaroidItem[] = [
   {
     id: "polaroid-chaitya",
-    image: "/portfolio/about_portrait.jpg",
+    image: "/portfolio/about_portrait.webp",
     alt: "Chaitya Shah seated with vintage cameras and contemplative natural light",
     caption: "Chaitya · In the Studio",
     rotation: -7,
@@ -40,7 +40,7 @@ export const ABOUT_POLAROIDS: PolaroidItem[] = [
   },
   {
     id: "polaroid-lake-pichola",
-    image: "/selected-work/sw-1-poster.jpg",
+    image: "/selected-work/sw-1-poster.webp",
     alt: "Atmospheric stillness and architecture over Lake Pichola at twilight",
     caption: "Udaipur, Lake Pichola",
     rotation: 6,
@@ -52,7 +52,7 @@ export const ABOUT_POLAROIDS: PolaroidItem[] = [
   },
   {
     id: "polaroid-noir-shadow",
-    image: "/selected-work/sw-2-poster.jpg",
+    image: "/selected-work/sw-2-poster.webp",
     alt: "Sculptural footwear and deep shadow study for Theater collection",
     caption: "Theater · Form & Shadow",
     rotation: 5,
@@ -64,7 +64,7 @@ export const ABOUT_POLAROIDS: PolaroidItem[] = [
   },
   {
     id: "polaroid-botanical-ritual",
-    image: "/hero-images/maison-table.jpg",
+    image: "/hero-images/maison-table.webp",
     alt: "Curated culinary still life and editorial table setting for Maison Twenty Seven",
     caption: "Maison Twenty Seven · Table Study",
     rotation: -6,

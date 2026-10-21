@@ -24,9 +24,9 @@ export const SELECTED_WORK_PROJECTS: SelectedWorkProject[] = [
     category: "Luxury Hospitality & Destination",
     description:
       "Capturing the island palace in Udaipur across calm rippling waters, glowing marble silhouettes, and the soft amber light of dusk.",
-    image: "/selected-work/sw-1-poster.jpg",
+    image: "/selected-work/sw-1-poster.webp",
     video: "/selected-work/sw-1.mp4",
-    poster: "/selected-work/sw-1-poster.jpg",
+    poster: "/selected-work/sw-1-poster.webp",
     alt: "Lake Pichola and Taj Lake Palace at sunset in Udaipur",
   },
   {
@@ -36,9 +36,9 @@ export const SELECTED_WORK_PROJECTS: SelectedWorkProject[] = [
     category: "Editorial Fashion & Accessories",
     description:
       "Sculpted leather silhouettes, timeless vintage textures, and deliberate styling photographed in intimate natural sunset light.",
-    image: "/selected-work/sw-2-poster.jpg",
+    image: "/selected-work/sw-2-poster.webp",
     video: "/selected-work/sw-2.mp4",
-    poster: "/selected-work/sw-2-poster.jpg",
+    poster: "/selected-work/sw-2-poster.webp",
     alt: "Theater noir leather accessories and Mary Jane heels",
   },
   {
@@ -48,9 +48,9 @@ export const SELECTED_WORK_PROJECTS: SelectedWorkProject[] = [
     category: "Travel & Lifestyle Cinematography",
     description:
       "An intimate visual diary following the rhythm of coastal roads, swaying coconut palms, and honest, spontaneous moments.",
-    image: "/selected-work/sw-3-poster.jpg",
+    image: "/selected-work/sw-3-poster.webp",
     video: "/selected-work/sw-3.mp4",
-    poster: "/selected-work/sw-3-poster.jpg",
+    poster: "/selected-work/sw-3-poster.webp",
     alt: "Visual storyteller with camera along a tropical coastal avenue",
   },
   {
@@ -60,9 +60,9 @@ export const SELECTED_WORK_PROJECTS: SelectedWorkProject[] = [
     category: "Product & Apothecary Still Life",
     description:
       "Macro light refractions, sparkling fine fragrance mist vessels, and flowing champagne silk textiles designed for commercial sensory allure.",
-    image: "/selected-work/sw-4-poster.jpg",
+    image: "/selected-work/sw-4-poster.webp",
     video: "/selected-work/sw-4.mp4",
-    poster: "/selected-work/sw-4-poster.jpg",
+    poster: "/selected-work/sw-4-poster.webp",
     alt: "Bath & Body Works fragrance mist collection on champagne silk satin",
   },
   {
@@ -72,9 +72,9 @@ export const SELECTED_WORK_PROJECTS: SelectedWorkProject[] = [
     category: "Creative Disciplines & Brand Story",
     description:
       "Artisan brushwork, contemplative morning focus, and tactile painting processes documented amidst organic grove greenery.",
-    image: "/selected-work/sw-5-poster.jpg",
+    image: "/selected-work/sw-5-poster.webp",
     video: "/selected-work/sw-5.mp4",
-    poster: "/selected-work/sw-5-poster.jpg",
+    poster: "/selected-work/sw-5-poster.webp",
     alt: "Artist plein air painting under a shaded tree with easel and palette",
   },
   {
@@ -84,9 +84,9 @@ export const SELECTED_WORK_PROJECTS: SelectedWorkProject[] = [
     category: "Artisanal Lifestyle & Motion",
     description:
       "Free-flowing movement, earthy linen draping, and the quiet cadence of solitary afternoon warmth in the mango grove.",
-    image: "/selected-work/sw-6-poster.jpg",
+    image: "/selected-work/sw-6-poster.webp",
     video: "/selected-work/sw-6.mp4",
-    poster: "/selected-work/sw-6-poster.jpg",
+    poster: "/selected-work/sw-6-poster.webp",
     alt: "Walking through a sunlit mango orchard in organic linen apparel",
   },
 ];

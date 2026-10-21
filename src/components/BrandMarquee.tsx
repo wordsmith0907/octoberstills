@@ -20,7 +20,7 @@ const VERIFIED_BRANDS: BrandItem[] = [
   },
   {
     name: "Myntra",
-    logo: "/brands/myntra.png",
+    logo: "/brands/myntra.webp",
     desktopHeight: 24,
     mobileHeight: 19,
   },
@@ -44,13 +44,13 @@ const VERIFIED_BRANDS: BrandItem[] = [
   },
   {
     name: "The Misnomer",
-    logo: "/brands/the-misnomer.png",
+    logo: "/brands/the-misnomer.webp",
     desktopHeight: 23,
     mobileHeight: 18,
   },
   {
     name: "Theater",
-    logo: "/brands/theater.png",
+    logo: "/brands/theater.webp",
     desktopHeight: 19,
     mobileHeight: 15,
   },
@@ -62,7 +62,7 @@ const VERIFIED_BRANDS: BrandItem[] = [
   },
   {
     name: "Rathi Silks",
-    logo: "/brands/rathi-silks.png",
+    logo: "/brands/rathi-silks.webp",
     desktopHeight: 27,
     mobileHeight: 22,
   },

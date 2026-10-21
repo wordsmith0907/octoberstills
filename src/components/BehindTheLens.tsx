@@ -317,7 +317,7 @@ export function BehindTheLens() {
         className="hidden md:block absolute right-8 lg:right-14 xl:right-20 bottom-8 lg:bottom-12 xl:bottom-14 pointer-events-none select-none z-0"
       >
         <img
-          src="/assets/autumn-leaf.png"
+          src="/assets/autumn-leaf.webp"
           alt=""
           aria-hidden="true"
           draggable={false}
@@ -340,7 +340,7 @@ export function BehindTheLens() {
         className="hidden md:block absolute left-8 lg:left-14 xl:left-20 top-8 lg:top-12 xl:top-14 pointer-events-none select-none z-0"
       >
         <img
-          src="/assets/autumn-leaf.png"
+          src="/assets/autumn-leaf.webp"
           alt=""
           aria-hidden="true"
           draggable={false}

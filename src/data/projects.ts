@@ -53,9 +53,9 @@ export const workProjects: WorkProject[] = [
     description:
       "A closer look at the little rituals that make everyday moments feel special.",
     image:
-      "https://images.pexels.com/photos/3762466/pexels-photo-3762466.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/3762466/pexels-photo-3762466.webp?auto=compress&cs=tinysrgb&w=800",
     video: "/ringview/1.mp4",
-    poster: "/ringview/1-poster.jpg",
+    poster: "/ringview/1-poster.webp",
     alt: "Woman applying skincare in natural light",
     isPlaceholder: true,
     source: "Pexels / Andrea Piacquadio",
@@ -68,9 +68,9 @@ export const workProjects: WorkProject[] = [
     description:
       "Texture, light, and thoughtful product storytelling, captured up close.",
     image:
-      "https://images.pexels.com/photos/3685530/pexels-photo-3685530.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/3685530/pexels-photo-3685530.webp?auto=compress&cs=tinysrgb&w=800",
     video: "/ringview/3.mp4",
-    poster: "/ringview/3-poster.jpg",
+    poster: "/ringview/3-poster.webp",
     alt: "Skincare products arranged with warm lighting",
     isPlaceholder: true,
     source: "Pexels / Karolina Kaboompics",
@@ -83,9 +83,9 @@ export const workProjects: WorkProject[] = [
     description:
       "The colors, textures, and moments that make food impossible to scroll past.",
     image:
-      "https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/312418/pexels-photo-312418.webp?auto=compress&cs=tinysrgb&w=800",
     video: "/ringview/5.mp4",
-    poster: "/ringview/5-poster.jpg",
+    poster: "/ringview/5-poster.webp",
     alt: "Artisan coffee preparation with latte art",
     isPlaceholder: true,
     source: "Pexels / Chevanon Photography",
@@ -98,9 +98,9 @@ export const workProjects: WorkProject[] = [
     description:
       "Relatable lifestyle moments with an effortless, personal feel.",
     image:
-      "https://images.pexels.com/photos/3771120/pexels-photo-3771120.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/3771120/pexels-photo-3771120.webp?auto=compress&cs=tinysrgb&w=800",
     video: "/ringview/7.mp4",
-    poster: "/ringview/7-poster.jpg",
+    poster: "/ringview/7-poster.webp",
     alt: "Woman in warm interior enjoying everyday routine",
     isPlaceholder: true,
     source: "Pexels / Andrea Piacquadio",
@@ -113,9 +113,9 @@ export const workProjects: WorkProject[] = [
     description:
       "Authentic beauty storytelling with personality at the center.",
     image:
-      "https://images.pexels.com/photos/3373716/pexels-photo-3373716.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/3373716/pexels-photo-3373716.webp?auto=compress&cs=tinysrgb&w=800",
     video: "/ringview/1.mp4",
-    poster: "/ringview/1-poster.jpg",
+    poster: "/ringview/1-poster.webp",
     alt: "Creator demonstrating beauty product application",
     isPlaceholder: true,
     source: "Pexels / Cottonbro Studio",
@@ -128,7 +128,7 @@ export const workProjects: WorkProject[] = [
     description:
       "Thoughtfully composed imagery where light, texture, and detail tell the story.",
     image:
-      "https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/4041392/pexels-photo-4041392.webp?auto=compress&cs=tinysrgb&w=800",
     alt: "Editorial still-life with skincare products and botanicals",
     isPlaceholder: true,
     source: "Pexels / Monstera Production",
@@ -141,14 +141,14 @@ export const workProjects: WorkProject[] = [
 export const aboutAssets = {
   primary: {
     image:
-      "https://images.pexels.com/photos/1382730/pexels-photo-1382730.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "https://images.pexels.com/photos/1382730/pexels-photo-1382730.webp?auto=compress&cs=tinysrgb&w=1200",
     alt: "Editorial portrait of Aurea Biazon in warm natural light",
     isPlaceholder: true,
     source: "Pexels / Tuấn Kiệt Jr.",
   },
   secondary: {
     image:
-      "https://images.pexels.com/photos/1382732/pexels-photo-1382732.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1382732/pexels-photo-1382732.webp?auto=compress&cs=tinysrgb&w=800",
     alt: "Creative lifestyle and botanical styling details",
     isPlaceholder: true,
     source: "Pexels / Tuấn Kiệt Jr.",

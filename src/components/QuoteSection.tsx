@@ -124,7 +124,7 @@ export function QuoteSection() {
               aria-hidden="true"
             >
               <img
-                src="/assets/chaitya-flower.png"
+                src="/assets/chaitya-flower.webp"
                 alt="Chaitya Shah holding flower"
                 width={58}
                 height={58}
@@ -186,7 +186,7 @@ export function QuoteSection() {
               aria-hidden="true"
             >
               <img
-                src="/assets/autumn-foliage.png"
+                src="/assets/autumn-foliage.webp"
                 alt="Autumn foliage"
                 width={48}
                 height={48}

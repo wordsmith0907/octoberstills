@@ -18,7 +18,7 @@ const DISCIPLINES: Discipline[] = [
     title: "Photography",
     subtitle: "Editorial portraiture, campaigns & architectural still life.",
     mediaType: "image",
-    mediaSrc: "/hero-images/simons-vertical.jpg",
+    mediaSrc: "/hero-images/simons-vertical.webp",
   },
   {
     id: "cinematography",
@@ -27,7 +27,7 @@ const DISCIPLINES: Discipline[] = [
     subtitle: "Atmospheric brand films, motion poems & cinematic direction.",
     mediaType: "video",
     mediaSrc: "/ringview/5.mp4",
-    poster: "/ringview/5-poster.jpg",
+    poster: "/ringview/5-poster.webp",
   },
   {
     id: "ugc-content",
@@ -36,7 +36,7 @@ const DISCIPLINES: Discipline[] = [
     subtitle: "Tactile creator storytelling, organic aesthetic & luxury social reels.",
     mediaType: "video",
     mediaSrc: "/ringview/7.mp4",
-    poster: "/ringview/7-poster.jpg",
+    poster: "/ringview/7-poster.webp",
   },
 ];
 

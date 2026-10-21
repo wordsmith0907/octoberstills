@@ -39,9 +39,9 @@ const GOVARDHAN_MEDIA = [
   "/hero-videos/hero-5.mp4", // Item 6 (Portrait: 507x761 - Orchard twirl)
   "/hero-videos/hero-6.mp4", // Item 7 (Portrait: 451x676 - Silk shirt luxury UGC)
   "/hero-videos/hero-7.mp4", // Item 8 (Portrait: 375x563 - Mountain meadow sheep)
-  "/hero-images/simons-vertical.jpg", // Item 9 (Portrait: 523x784 - Simon's Groot Constantia exterior)
+  "/hero-images/simons-vertical.webp", // Item 9 (Portrait: 523x784 - Simon's Groot Constantia exterior)
   "/hero-videos/hero-8.mp4", // Item 10 (Portrait: 422x632 - Nature field walk)
-  "/hero-images/maison-table.jpg", // Item 11 (Landscape: 523x370 - Maison Twenty Seven table spread)
+  "/hero-images/maison-table.webp", // Item 11 (Landscape: 523x370 - Maison Twenty Seven table spread)
   "/hero-videos/hero-9.mp4", // Item 12 (Portrait: 423x620 - Golden hour sunbeam editorial)
 ];
 

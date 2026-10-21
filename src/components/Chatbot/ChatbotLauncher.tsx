@@ -28,7 +28,7 @@ export function ChatbotLauncher({
         ) : (
           <div className="relative w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center">
             <img
-              src="/oktober-notes/leaf-icon-56.png"
+              src="/oktober-notes/leaf-icon-56.webp"
               alt="Oktober Notes"
               width={56}
               height={56}

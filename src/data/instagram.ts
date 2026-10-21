@@ -28,7 +28,7 @@ export const INSTAGRAM_PROFILE_URL = "https://www.instagram.com/octoberstills";
 export const INSTAGRAM_POSTS: InstagramPost[] = [
   {
     id: "journal-post-1",
-    coverImage: "/selected-work/sw-3-poster.jpg",
+    coverImage: "/selected-work/sw-3-poster.webp",
     videoPreview: "/selected-work/sw-3.mp4",
     instagramUrl: "https://www.instagram.com/octoberstills/",
     alt: "Chaitya Shah framing cinematography in the mountains",
@@ -37,7 +37,7 @@ export const INSTAGRAM_POSTS: InstagramPost[] = [
   },
   {
     id: "journal-post-2",
-    coverImage: "/selected-work/sw-2-poster.jpg",
+    coverImage: "/selected-work/sw-2-poster.webp",
     videoPreview: "/selected-work/sw-2.mp4",
     instagramUrl: "https://www.instagram.com/octoberstills/",
     alt: "Noir footwear and sculptural shadows campaign study for Theater",
@@ -46,7 +46,7 @@ export const INSTAGRAM_POSTS: InstagramPost[] = [
   },
   {
     id: "journal-post-3",
-    coverImage: "/hero-images/maison-table.jpg",
+    coverImage: "/hero-images/maison-table.webp",
     // Image-only post (no videoPreview), demonstrates graceful image-only card behavior
     instagramUrl: "https://www.instagram.com/octoberstills/",
     alt: "Curated culinary still life and table setting for Maison Twenty Seven",
@@ -55,7 +55,7 @@ export const INSTAGRAM_POSTS: InstagramPost[] = [
   },
   {
     id: "journal-post-4",
-    coverImage: "/portfolio/bento1.jpg",
+    coverImage: "/portfolio/bento1.webp",
     videoPreview: "/hero-videos/hero-4.mp4",
     instagramUrl: "https://www.instagram.com/octoberstills/",
     alt: "Intimate wedding vows and timeless heritage ceremony",

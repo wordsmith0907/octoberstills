@@ -5,14 +5,14 @@ import gsap from "gsap";
 // Preloader images — Chaitiya's portfolio images (reusing ringview assets)
 // ---------------------------------------------------------------------------
 const PRELOADER_IMAGES = [
-  "/ringview/0.jpg",
-  "/ringview/2.jpg",
-  "/ringview/4.jpg",
-  "/ringview/6.jpg",
-  "/ringview/1-poster.jpg",
-  "/ringview/3-poster.jpg",
-  "/ringview/5-poster.jpg",
-  "/ringview/7-poster.jpg",
+  "/ringview/0.webp",
+  "/ringview/2.webp",
+  "/ringview/4.webp",
+  "/ringview/6.webp",
+  "/ringview/1-poster.webp",
+  "/ringview/3-poster.webp",
+  "/ringview/5-poster.webp",
+  "/ringview/7-poster.webp",
 ];
 
 // Scattered image positions — inspired by Solvo's burst-from-center composition

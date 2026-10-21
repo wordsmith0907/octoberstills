@@ -430,7 +430,7 @@ export function ChatbotPanel({
           {/* Autumn Leaf Icon */}
           <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#B9784E]/40 bg-[#251b16] flex items-center justify-center p-1 shrink-0 shadow-xs">
             <img
-              src="/oktober-notes/leaf-icon-32.png"
+              src="/oktober-notes/leaf-icon-32.webp"
               alt="Oktober Notes"
               width={32}
               height={32}
