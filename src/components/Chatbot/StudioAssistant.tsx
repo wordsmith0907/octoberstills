@@ -39,9 +39,98 @@ export function StudioAssistant({ visible = true }: StudioAssistantProps) {
     async (
       messages: ChatMessage[],
       projectSummary?: any,
-      conversationId?: string
+      conversationId?: string,
+      options?: {
+        signal?: AbortSignal;
+        onChunk?: (text: string) => void;
+      }
     ): Promise<ChatResponsePayload> => {
-      // Primary: standard REST endpoint /api/chat
+      // 1. Primary: Streaming SSE endpoint /api/chat
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "text/event-stream",
+          },
+          body: JSON.stringify({
+            messages,
+            currentSection,
+            projectSummary,
+            conversationId,
+            stream: true,
+          }),
+          signal: options?.signal,
+        });
+
+        const contentType = res.headers.get("content-type") || "";
+
+        // Handle SSE streaming
+        if (res.ok && contentType.includes("text/event-stream") && res.body) {
+          const reader = res.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = "";
+          let accumulatedReply = "";
+          let finalResponse: ChatResponsePayload | null = null;
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const parts = buffer.split("\n\n");
+            buffer = parts.pop() || "";
+
+            for (const part of parts) {
+              const line = part.trim();
+              if (line.startsWith("data: ")) {
+                try {
+                  const event = JSON.parse(line.slice(6));
+                  if (event.type === "chunk" && event.text) {
+                    accumulatedReply += event.text;
+                    if (options?.onChunk) {
+                      options.onChunk(accumulatedReply);
+                    }
+                  } else if (event.type === "done") {
+                    finalResponse = {
+                      reply: event.reply || accumulatedReply,
+                      detectedIntent: event.detectedIntent,
+                      suggestedActions: event.suggestedActions,
+                      path: event.path,
+                      isFallback: event.isFallback,
+                    };
+                  }
+                } catch {
+                  // Partial chunk JSON parse fallback
+                }
+              }
+            }
+          }
+
+          if (finalResponse) {
+            return finalResponse;
+          }
+          if (accumulatedReply.trim().length > 0) {
+            return {
+              reply: accumulatedReply.trim(),
+              suggestedActions: ["Discuss a Project", "View Selected Work"],
+            };
+          }
+        }
+
+        // Handle direct JSON response (e.g. instant FAQ or cached knowledge)
+        if (res.ok && contentType.includes("application/json")) {
+          const data = await res.json();
+          if (data && data.reply) {
+            return data;
+          }
+        }
+      } catch (err: any) {
+        if (err.name === "AbortError") throw err;
+        console.warn("[StudioAssistant] Streaming fetch error, trying non-streaming fallback:", err);
+      }
+
+      // 2. Fallback: Standard JSON REST /api/chat
       try {
         const res = await fetch("/api/chat", {
           method: "POST",
@@ -51,7 +140,9 @@ export function StudioAssistant({ visible = true }: StudioAssistantProps) {
             currentSection,
             projectSummary,
             conversationId,
+            stream: false,
           }),
+          signal: options?.signal,
         });
         if (res.ok) {
           const data = await res.json();
@@ -59,11 +150,12 @@ export function StudioAssistant({ visible = true }: StudioAssistantProps) {
             return data;
           }
         }
-      } catch (err) {
+      } catch (err: any) {
+        if (err.name === "AbortError") throw err;
         console.warn("[StudioAssistant] REST /api/chat error:", err);
       }
 
-      // Fallback: TanStack Start createServerFn RPC
+      // 3. Fallback: TanStack Start RPC createServerFn
       try {
         const rpcResult = await chatWithStudioAssistant({
           data: {

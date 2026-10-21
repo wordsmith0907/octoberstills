@@ -2,7 +2,8 @@ import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
-import { executeChat } from "./lib/gemini-service";
+import { executeConciergeChat, streamConciergeChat, conciergeMetrics } from "./lib/concierge-engine";
+import { BRAND_KNOWLEDGE_VERSION } from "./data/brand-knowledge";
 import { saveInquiry } from "./lib/lead-storage";
 
 type ServerEntry = {
@@ -48,22 +49,72 @@ export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const url = new URL(request.url);
+      const clientIp = request.headers.get("x-forwarded-for") || "unknown";
 
-      // Handle REST Chat Endpoint
+      // Health and Diagnostics Endpoint
+      if ((url.pathname === "/api/health" || url.pathname === "/api/metrics") && request.method === "GET") {
+        const avgLatency = conciergeMetrics.latencies.length > 0
+          ? Math.round(conciergeMetrics.latencies.reduce((a, b) => a + b, 0) / conciergeMetrics.latencies.length)
+          : 0;
+
+        return new Response(
+          JSON.stringify({
+            status: "healthy",
+            assistant: "Oktober Notes",
+            version: BRAND_KNOWLEDGE_VERSION,
+            uptimeSeconds: Math.floor(process.uptime ? process.uptime() : 0),
+            metrics: {
+              totalRequests: conciergeMetrics.totalRequests,
+              instantFaqHits: conciergeMetrics.instantFaqHits,
+              cachedKnowledgeHits: conciergeMetrics.cachedKnowledgeHits,
+              geminiCalls: conciergeMetrics.geminiCalls,
+              scopeRefusals: conciergeMetrics.scopeRefusals,
+              rateLimitHits: conciergeMetrics.rateLimitHits,
+              errorCount: conciergeMetrics.errorCount,
+              averageLatencyMs: avgLatency,
+            },
+          }),
+          {
+            status: 200,
+            headers: {
+              "Content-Type": "application/json",
+              "Cache-Control": "no-store, max-age=0",
+            },
+          }
+        );
+      }
+
+      // Handle Chat Endpoint (SSE Streaming & Standard JSON)
       if (url.pathname === "/api/chat" && request.method === "POST") {
         const body = await request.json().catch(() => ({}));
-        const clientIp = request.headers.get("x-forwarded-for") || "unknown";
-        const result = await executeChat(body, clientIp);
+        const acceptHeader = request.headers.get("accept") || "";
+        const wantsStream = body.stream === true || acceptHeader.includes("text/event-stream");
+
+        if (wantsStream) {
+          const stream = streamConciergeChat(body, clientIp);
+          return new Response(stream, {
+            status: 200,
+            headers: {
+              "Content-Type": "text/event-stream",
+              "Cache-Control": "no-cache, no-transform",
+              "Connection": "keep-alive",
+            },
+          });
+        }
+
+        const result = await executeConciergeChat(body, clientIp);
         return new Response(JSON.stringify(result), {
           status: 200,
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Cache-Control": "no-store, max-age=0",
+          },
         });
       }
 
       // Handle REST Lead Submission Endpoint
       if (url.pathname === "/api/inquiry" && request.method === "POST") {
         const body = await request.json().catch(() => ({}));
-        const clientIp = request.headers.get("x-forwarded-for") || "unknown";
         const result = await saveInquiry(body, clientIp);
         return new Response(JSON.stringify(result), {
           status: result.success ? 200 : 400,

@@ -32,7 +32,11 @@ interface ChatbotPanelProps {
   onSendMessage: (
     messages: ChatMessage[],
     projectSummary?: ProjectSummary,
-    conversationId?: string
+    conversationId?: string,
+    options?: {
+      signal?: AbortSignal;
+      onChunk?: (text: string) => void;
+    }
   ) => Promise<ChatResponsePayload>;
   onSubmitInquiry: (payload: InquirySubmissionPayload) => Promise<InquiryResponse>;
   currentSection?: string;
@@ -59,6 +63,7 @@ export function ChatbotPanel({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [streamingReply, setStreamingReply] = useState<string | null>(null);
   const [showInquiryForm, setShowInquiryForm] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>(DEFAULT_SUGGESTIONS);
   const [isRestoredFromMemory, setIsRestoredFromMemory] = useState(false);
@@ -68,6 +73,7 @@ export function ChatbotPanel({
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   // Initialize or restore persistent conversation on mount
   useEffect(() => {
@@ -152,7 +158,7 @@ export function ChatbotPanel({
     if (isOpen) {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages, isLoading, showInquiryForm, isOpen]);
+  }, [messages, streamingReply, isLoading, showInquiryForm, isOpen]);
 
   // Focus input when opened
   useEffect(() => {
@@ -283,10 +289,18 @@ export function ChatbotPanel({
     const currentSummary = conversation?.projectSummary;
     const updatedSummary = extractProjectSummary(text, currentSummary);
 
+    // Abort any pending stream
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
     const newMessages: ChatMessage[] = [...messages, { role: "user", content: text }];
     setMessages(newMessages);
     setInputText("");
     setIsLoading(true);
+    setStreamingReply("");
 
     // Save user message immediately to IndexedDB
     await persistConversationState(newMessages, updatedSummary);
@@ -294,16 +308,28 @@ export function ChatbotPanel({
     try {
       // 2. Send only recent conversation turns (last 6) + structured project summary to minimize tokens and latency
       const recentTurns = newMessages.slice(-6);
-      const response = await onSendMessage(recentTurns, updatedSummary, conversation?.id);
+      const response = await onSendMessage(
+        recentTurns,
+        updatedSummary,
+        conversation?.id,
+        {
+          signal: abortController.signal,
+          onChunk: (accumulated) => {
+            setStreamingReply(accumulated);
+          },
+        }
+      );
 
+      const finalReply = response.reply || "";
       const finalizedMessages: ChatMessage[] = [
         ...newMessages,
         {
           role: "assistant",
-          content: response.reply,
+          content: finalReply,
         },
       ];
       setMessages(finalizedMessages);
+      setStreamingReply(null);
 
       if (response.suggestedActions && response.suggestedActions.length > 0) {
         setSuggestions(response.suggestedActions);
@@ -322,7 +348,11 @@ export function ChatbotPanel({
 
       // Persist full conversation with assistant reply to IndexedDB
       await persistConversationState(finalizedMessages, updatedSummary, nextStage);
-    } catch {
+    } catch (err: any) {
+      if (err?.name === "AbortError") {
+        setStreamingReply(null);
+        return;
+      }
       const errorMessages: ChatMessage[] = [
         ...newMessages,
         {
@@ -332,15 +362,23 @@ export function ChatbotPanel({
         },
       ];
       setMessages(errorMessages);
+      setStreamingReply(null);
       setSuggestions(["Email Studio Directly", "View Selected Work"]);
       await persistConversationState(errorMessages, updatedSummary);
     } finally {
       setIsLoading(false);
+      setStreamingReply(null);
+      abortControllerRef.current = null;
     }
   };
 
   // Start new conversation handler
   const handleStartNewConversation = async () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setStreamingReply(null);
     setShowNewConfirm(false);
     setIsLoading(true);
 
@@ -366,6 +404,11 @@ export function ChatbotPanel({
 
   // Clear chat history handler (with confirmation)
   const handleClearHistory = async () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setStreamingReply(null);
     setShowClearConfirm(false);
     setIsLoading(true);
 
@@ -401,6 +444,15 @@ export function ChatbotPanel({
     return `${date.toLocaleDateString([], { month: "short", day: "numeric" })} at ${timeStr}`;
   };
 
+  const handleClosePanel = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setStreamingReply(null);
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -418,7 +470,7 @@ export function ChatbotPanel({
             setShowPrivacyInfo(false);
             return;
           }
-          onClose();
+          handleClosePanel();
         }
       }}
       className="fixed z-[10020] bottom-0 sm:bottom-6 right-0 sm:right-6 w-full sm:w-[420px] h-[100dvh] sm:h-[640px] sm:max-h-[85vh] bg-[#F3EADF] text-[#30231D] sm:rounded-2xl border border-[#30231D]/15 shadow-2xl flex flex-col overflow-hidden font-sans animate-in slide-in-from-bottom-6 duration-300"
@@ -510,7 +562,7 @@ export function ChatbotPanel({
           {/* Close Panel Button */}
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClosePanel}
             title="Close Oktober Notes"
             aria-label="Close Oktober Notes"
             className="p-1.5 rounded-full text-[#F3EADF]/80 hover:text-[#F3EADF] hover:bg-white/10 transition-colors ml-1 cursor-pointer"
@@ -674,6 +726,16 @@ export function ChatbotPanel({
           );
         })}
 
+        {/* Streaming assistant message in progress */}
+        {streamingReply !== null && streamingReply.length > 0 && (
+          <div className="flex flex-col items-start space-y-1">
+            <div className="max-w-[88%] px-4 py-2.5 rounded-2xl text-[13.5px] leading-relaxed bg-[#FFFFFF] text-[#30231D] border border-[#30231D]/10 rounded-bl-xs shadow-xs">
+              {streamingReply}
+              <span className="inline-block w-1.5 h-3.5 ml-1 bg-[#B9784E] animate-pulse align-middle" />
+            </div>
+          </div>
+        )}
+
         {/* Interactive Lead Submission Form Card */}
         {showInquiryForm && (
           <div className="pt-2">
@@ -694,8 +756,8 @@ export function ChatbotPanel({
           </div>
         )}
 
-        {/* Typing indicator */}
-        {isLoading && (
+        {/* Typing indicator - only shown while waiting for first token */}
+        {isLoading && (!streamingReply || streamingReply.length === 0) && (
           <div className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-[#FFFFFF] border border-[#30231D]/10 w-fit text-[#30231D]/60 text-xs">
             <span className="w-1.5 h-1.5 rounded-full bg-[#B9784E] animate-bounce" />
             <span

@@ -116,14 +116,20 @@ function openDatabase(): Promise<IDBDatabase> {
   });
 }
 
-// Generate unique conversation ID
+// Generate unique conversation ID using cryptographically secure UUID
 export function generateConversationId(): string {
-  return `conv_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return `sess_${crypto.randomUUID()}`;
+  }
+  return `sess_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 }
 
-// Generate message ID
+// Generate message ID using cryptographically secure UUID
 export function generateMessageId(): string {
-  return `msg_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return `msg_${crypto.randomUUID()}`;
+  }
+  return `msg_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 }
 
 // Get configured retention period in ms
