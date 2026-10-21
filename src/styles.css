@@ -794,50 +794,136 @@
 }
 
 /* ==========================================================================
-   SELECTED WORK — Mobile Swipe Gallery
+   SELECTED WORK — Mobile Horizontal Scroll Gallery
    ========================================================================== */
 .sw-mobile-section {
   background: var(--background);
-  padding: clamp(48px, 7vw, 72px) 0;
+  position: relative;
+  width: 100%;
   border-top: 1px solid color-mix(in oklch, var(--border) 50%, transparent);
+}
+
+.sw-mobile-pinned {
+  height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: clamp(16px, 2.8vh, 24px) 0 clamp(16px, 2.5vh, 24px);
+  overflow: hidden;
+  gap: clamp(8px, 1.8vh, 16px);
 }
 
 .sw-mobile-header {
   padding: 0 clamp(20px, 5vw, 32px);
-  margin-bottom: 32px;
   text-align: center;
+  flex-shrink: 0;
+}
+
+.sw-mobile-header .sw-eyebrow {
+  margin-bottom: 4px;
+}
+
+.sw-mobile-header .sw-heading {
+  font-size: clamp(1.85rem, 5.5vw, 2.4rem);
+  margin-bottom: 6px;
+  line-height: 1.1;
 }
 
 .sw-mobile-header .sw-description {
   margin: 0 auto;
+  font-size: clamp(0.8125rem, 3.2vw, 0.875rem);
+  max-width: 360px;
+  line-height: 1.45;
+}
+
+.sw-mobile-track-wrapper {
+  width: 100%;
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  align-items: center;
 }
 
 .sw-mobile-track {
   display: flex;
-  gap: 20px;
-  padding: 0 clamp(20px, 5vw, 32px);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-
-.sw-mobile-track::-webkit-scrollbar {
-  display: none;
+  gap: 16px;
+  padding: 0 24px;
+  width: max-content;
+  flex-shrink: 0;
+  will-change: transform;
 }
 
 .sw-mobile-card {
   flex-shrink: 0;
-  width: 80vw;
-  max-width: 340px;
-  scroll-snap-align: start;
+  width: 78vw;
+  max-width: 310px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 8px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .sw-mobile-card .sw-card-media {
+  position: relative;
+  width: 100%;
   aspect-ratio: 4 / 5;
+  max-height: 46vh;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(48, 35, 29, 0.1);
+}
+
+.sw-mobile-card .sw-card-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.sw-play-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 9999px;
+  background: rgba(48, 35, 29, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(243, 234, 223, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Reduced motion fallback: native horizontal swipe scroll */
+@media (prefers-reduced-motion: reduce) {
+  .sw-mobile-pinned {
+    height: auto;
+    overflow: visible;
+  }
+  .sw-mobile-track-wrapper {
+    overflow: visible;
+  }
+  .sw-mobile-track {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .sw-mobile-track::-webkit-scrollbar {
+    display: none;
+  }
+  .sw-mobile-card {
+    scroll-snap-align: start;
+  }
 }
 
 /* ==========================================================================
@@ -2149,7 +2235,7 @@
 .lightbox {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2185,7 +2271,7 @@
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease;
-  z-index: 101;
+  z-index: 10000;
 }
 
 .lightbox-close:hover {

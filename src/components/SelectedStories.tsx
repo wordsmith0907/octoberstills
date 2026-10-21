@@ -1,5 +1,9 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export interface SelectedWorkProject {
   id: string;
@@ -155,6 +159,9 @@ export function SelectedStories() {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
+  const mobileSectionRef = useRef<HTMLElement>(null);
+  const mobileTrackRef = useRef<HTMLDivElement>(null);
+  const touchStartPos = useRef<{ x: number; y: number; time: number } | null>(null);
 
   const [selectedModal, setSelectedModal] = useState<SelectedWorkProject | null>(null);
 
@@ -305,6 +312,71 @@ export function SelectedStories() {
       resizeObserver?.disconnect();
     };
   }, [calculateMaxTrackScroll]);
+
+  // Mobile-only pinned scroll-driven horizontal gallery
+  useEffect(() => {
+    const section = mobileSectionRef.current;
+    const track = mobileTrackRef.current;
+    if (!section || !track) return;
+
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      mm.add("(max-width: 767px) and (prefers-reduced-motion: no-preference)", () => {
+        const calculateTravel = () => {
+          return Math.max(0, track.scrollWidth - window.innerWidth);
+        };
+
+        const tween = gsap.to(track, {
+          x: () => -calculateTravel(),
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: () => `+=${Math.max(1400, calculateTravel() * 1.35)}`,
+            pin: true,
+            scrub: 0.8,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            refreshPriority: 1,
+          },
+        });
+
+        const onResize = () => {
+          ScrollTrigger.refresh();
+        };
+        window.addEventListener("resize", onResize, { passive: true });
+        window.addEventListener("orientationchange", onResize, { passive: true });
+
+        return () => {
+          tween.kill();
+          window.removeEventListener("resize", onResize);
+          window.removeEventListener("orientationchange", onResize);
+        };
+      });
+    }, mobileSectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const handleMobileTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStartPos.current = { x: t.clientX, y: t.clientY, time: Date.now() };
+  };
+
+  const handleMobileTouchEnd = (e: React.TouchEvent, project: SelectedWorkProject) => {
+    if (!touchStartPos.current) return;
+    const t = e.changedTouches[0];
+    const dx = Math.abs(t.clientX - touchStartPos.current.x);
+    const dy = Math.abs(t.clientY - touchStartPos.current.y);
+    const dt = Date.now() - touchStartPos.current.time;
+    touchStartPos.current = null;
+
+    // Intentional tap threshold (< 8px displacement and < 350ms duration)
+    if (dx < 8 && dy < 8 && dt < 350) {
+      openLightbox(project);
+    }
+  };
 
   // Drag interaction for desktop carousel
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -472,63 +544,80 @@ export function SelectedStories() {
       </section>
 
       {/* =========================================================================
-          Mobile Horizontal Snap Track (<= 767px)
+          Mobile Horizontal Pinned Scroll Track (<= 767px)
           ========================================================================= */}
       <section
         className="sw-mobile-section"
         id="work-mobile"
+        ref={mobileSectionRef}
         aria-label="Selected Work Gallery"
       >
-        <div className="sw-mobile-header">
-          <p className="sw-eyebrow">SELECTED WORK</p>
-          <h2 className="sw-heading">Stories in motion.</h2>
-          <p className="sw-description">
-            From architectural stillness to intimate brand films, explore commissioned visuals created with quiet luxury and intentional light.
-          </p>
-        </div>
+        <div className="sw-mobile-pinned">
+          <div className="sw-mobile-header">
+            <p className="sw-eyebrow">SELECTED WORK</p>
+            <h2 className="sw-heading">Stories in motion.</h2>
+            <p className="sw-description">
+              From architectural stillness to intimate brand films, explore commissioned visuals created with quiet luxury and intentional light.
+            </p>
+          </div>
 
-        <div className="sw-mobile-track">
-          {SELECTED_WORK_PROJECTS.map((project) => (
-            <article key={project.id} className="sw-mobile-card">
-              <div
-                className="sw-card-media"
-                onClick={() => openLightbox(project)}
-                role="button"
-                tabIndex={0}
-                aria-label={`View ${project.title}`}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    openLightbox(project);
-                  }
-                }}
-              >
-                {project.video ? (
-                  <video
-                    src={project.video}
-                    poster={project.poster || project.image}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                  />
-                ) : (
-                  <img
-                    src={project.poster || project.image}
-                    alt={project.alt}
-                    loading="lazy"
-                    draggable={false}
-                  />
-                )}
-              </div>
+          <div className="sw-mobile-track-wrapper">
+            <div className="sw-mobile-track" ref={mobileTrackRef}>
+              {SELECTED_WORK_PROJECTS.map((project) => (
+                <article
+                  key={project.id}
+                  className="sw-mobile-card"
+                  onTouchStart={handleMobileTouchStart}
+                  onTouchEnd={(e) => handleMobileTouchEnd(e, project)}
+                  onClick={() => {
+                    if (!hasDraggedRef.current) openLightbox(project);
+                  }}
+                >
+                  <div
+                    className="sw-card-media"
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`View ${project.title}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openLightbox(project);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        openLightbox(project);
+                      }
+                    }}
+                  >
+                    <img
+                      src={project.poster || project.image}
+                      alt={project.alt}
+                      loading="lazy"
+                      draggable={false}
+                    />
 
-              <div className="sw-card-info">
-                <h3 className="sw-card-title">{project.title}</h3>
-                <p className="sw-card-category">{project.category}</p>
-              </div>
-            </article>
-          ))}
+                    {/* Subtle video play indicator (Part 3) */}
+                    {project.video && (
+                      <div className="sw-play-indicator" aria-hidden="true">
+                        <svg
+                          className="w-4 h-4 text-[#F3EADF] ml-0.5"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="sw-card-info">
+                    <h3 className="sw-card-title">{project.title}</h3>
+                    <p className="sw-card-category">{project.category}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -540,53 +629,56 @@ export function SelectedStories() {
       </div>
 
       {/* =========================================================================
-          Lightbox Dialog Modal
+          Lightbox Dialog Modal (Portaled to document.body to prevent GSAP pin-spacer DOM collision)
           ========================================================================= */}
-      {selectedModal && (
-        <div
-          className="lightbox"
-          onClick={closeLightbox}
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${selectedModal.title} viewer`}
-        >
-          <button
-            className="lightbox-close"
+      {selectedModal &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            className="lightbox"
             onClick={closeLightbox}
-            aria-label="Close viewer"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${selectedModal.title} viewer`}
           >
-            ✕
-          </button>
+            <button
+              className="lightbox-close"
+              onClick={closeLightbox}
+              aria-label="Close viewer"
+            >
+              ✕
+            </button>
 
-          <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-            <div className="lightbox-media-wrap">
-              {selectedModal.video ? (
-                <video
-                  src={selectedModal.video}
-                  poster={selectedModal.poster || selectedModal.image}
-                  autoPlay
-                  muted
-                  loop
-                  controls
-                  playsInline
-                  className="lightbox-video"
-                />
-              ) : (
-                <img
-                  src={selectedModal.image}
-                  alt={selectedModal.alt}
-                  className="lightbox-img"
-                />
-              )}
-            </div>
+            <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+              <div className="lightbox-media-wrap">
+                {selectedModal.video ? (
+                  <video
+                    src={selectedModal.video}
+                    poster={selectedModal.poster || selectedModal.image}
+                    autoPlay
+                    muted
+                    loop
+                    controls
+                    playsInline
+                    className="lightbox-video"
+                  />
+                ) : (
+                  <img
+                    src={selectedModal.image}
+                    alt={selectedModal.alt}
+                    className="lightbox-img"
+                  />
+                )}
+              </div>
 
-            <div className="lightbox-info">
-              <h3 className="lightbox-title">{selectedModal.title}</h3>
-              <p className="lightbox-category">{selectedModal.category}</p>
+              <div className="lightbox-info">
+                <h3 className="lightbox-title">{selectedModal.title}</h3>
+                <p className="lightbox-category">{selectedModal.category}</p>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </>
   );
 }
