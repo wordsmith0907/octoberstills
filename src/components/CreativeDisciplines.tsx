@@ -63,52 +63,51 @@ export function CreativeDisciplines() {
         const c3 = card3Ref.current;
         if (!c1 || !c2 || !c3) return;
 
-        // Calculate card height and strip offset (approximately 6–7% of card height)
+        // Calculate card height and strip offset so title row is completely visible
         const updateStacking = () => {
-          const cardH = c1.offsetHeight || 300;
-          const strip = Math.max(18, Math.round(cardH * 0.065));
+          const headerEl = c1.querySelector(".cd-card-header") as HTMLElement | null;
+          // Top padding (16px) + header row height + clearance (12px), guaranteeing full title visibility
+          const strip = headerEl ? Math.max(54, Math.round(16 + headerEl.offsetHeight + 12)) : 56;
           const viewportH = window.innerHeight;
 
-          // Initial positions: Card 1 stationary; Cards 2 & 3 off-screen below
-          gsap.set(c1, { y: 0, zIndex: 10 });
-          gsap.set(c2, { y: viewportH + 60, zIndex: 20 });
-          gsap.set(c3, { y: viewportH * 1.5 + 60, zIndex: 30 });
+          // Initial positions: Card 1 stationary; Cards 2 & 3 positioned off-screen below
+          gsap.set(c1, { y: 0, zIndex: 10, willChange: "transform", force3D: true });
+          gsap.set(c2, { y: viewportH * 0.85, zIndex: 20, willChange: "transform", force3D: true });
+          gsap.set(c3, { y: viewportH * 1.15, zIndex: 30, willChange: "transform", force3D: true });
 
+          // Smooth, momentum-scrubbed timeline with zero jerky pauses
           const tl = gsap.timeline({
             scrollTrigger: {
               trigger: section,
               start: "top top",
               end: "+=1600",
               pin: true,
-              scrub: 0.8,
-              anticipatePin: 1,
+              pinSpacing: true,
+              scrub: 1.2,
               invalidateOnRefresh: true,
+              fastScrollEnd: true,
               refreshPriority: 1,
             },
           });
 
-          // Stage 1: Card 1 settled and stationary
-          tl.to({}, { duration: 0.1 });
-
-          // Stage 2: Card 2 rises directly over Card 1, settling at strip offset
+          // Stage 2: Card 2 rises seamlessly over Card 1, settling right where Card 1's title remains visible
           tl.to(c2, {
             y: strip,
-            ease: "power1.inOut",
-            duration: 0.8,
+            ease: "power1.out",
+            force3D: true,
+            duration: 1,
           });
 
-          // Brief settling pause for Card 2
-          tl.to({}, { duration: 0.15 });
-
-          // Stage 3: Card 3 rises directly over Card 2, settling at 2 * strip offset
+          // Stage 3: Card 3 rises seamlessly over Card 2, settling right where Card 2's title remains visible
           tl.to(c3, {
             y: strip * 2,
-            ease: "power1.inOut",
-            duration: 0.8,
+            ease: "power1.out",
+            force3D: true,
+            duration: 1,
           });
 
-          // Settling pause so Card 3 is fully appreciated before unpinning
-          tl.to({}, { duration: 0.25 });
+          // Smooth resting pause at the completed 3-layer index stack before seamless unpinning
+          tl.to({}, { duration: 0.35 });
         };
 
         updateStacking();
@@ -228,14 +227,14 @@ export function CreativeDisciplines() {
         {/* =====================================================================
             MOBILE LAYOUT (< 768px): Pinned Card Stacking Stage
             ===================================================================== */}
-        <div className="block md:hidden mt-6 relative w-full max-w-sm mx-auto h-[410px] sm:h-[440px]">
+        <div className="block md:hidden mt-6 relative w-full max-w-sm mx-auto h-[450px] sm:h-[480px]">
           {/* Card 1: Photography */}
           <div
             ref={card1Ref}
-            className="cd-mobile-card absolute top-0 left-0 right-0 w-full rounded-2xl bg-[#F3EADF] border border-[#30231D]/15 p-4 shadow-[0_12px_32px_-6px_rgba(48,35,29,0.16)] flex flex-col"
+            className="cd-mobile-card absolute top-0 left-0 right-0 w-full rounded-2xl bg-[#F3EADF] border border-[#30231D]/15 p-4 shadow-[0_10px_25px_-5px_rgba(48,35,29,0.12)] flex flex-col"
           >
             {/* Number and Title */}
-            <div className="flex items-baseline gap-2.5 pb-1">
+            <div className="cd-card-header flex items-baseline gap-2.5 pb-1">
               <span
                 className="text-[11.5px] font-medium tracking-[0.22em] text-[#B9784E] select-none"
                 style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
@@ -244,7 +243,7 @@ export function CreativeDisciplines() {
               </span>
               <span className="text-[#30231D]/25 font-light select-none">/</span>
               <h3
-                className="text-[1.35rem] font-light text-[#30231D] tracking-tight leading-tight"
+                className="text-[1.3rem] sm:text-[1.35rem] font-light text-[#30231D] tracking-tight leading-tight"
                 style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
               >
                 Photography
@@ -259,7 +258,7 @@ export function CreativeDisciplines() {
             </p>
 
             {/* Media Window */}
-            <div className="relative w-full h-[220px] sm:h-[240px] overflow-hidden rounded-xl bg-[#30231D]/10">
+            <div className="relative w-full h-[195px] sm:h-[215px] overflow-hidden rounded-xl bg-[#30231D]/10">
               <img
                 src="/hero-images/simons-vertical.webp"
                 alt="Photography"
@@ -272,10 +271,10 @@ export function CreativeDisciplines() {
           {/* Card 2: Films & Cinematography */}
           <div
             ref={card2Ref}
-            className="cd-mobile-card absolute top-0 left-0 right-0 w-full rounded-2xl bg-[#F3EADF] border border-[#30231D]/15 p-4 shadow-[0_14px_36px_-6px_rgba(48,35,29,0.20)] flex flex-col"
+            className="cd-mobile-card absolute top-0 left-0 right-0 w-full rounded-2xl bg-[#F3EADF] border border-[#30231D]/15 p-4 shadow-[0_14px_30px_-5px_rgba(48,35,29,0.18)] flex flex-col"
           >
             {/* Number and Title */}
-            <div className="flex items-baseline gap-2.5 pb-1">
+            <div className="cd-card-header flex items-baseline gap-2.5 pb-1">
               <span
                 className="text-[11.5px] font-medium tracking-[0.22em] text-[#B9784E] select-none"
                 style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
@@ -284,7 +283,7 @@ export function CreativeDisciplines() {
               </span>
               <span className="text-[#30231D]/25 font-light select-none">/</span>
               <h3
-                className="text-[1.35rem] font-light text-[#30231D] tracking-tight leading-tight"
+                className="text-[1.3rem] sm:text-[1.35rem] font-light text-[#30231D] tracking-tight leading-tight"
                 style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
               >
                 Films & Cinematography
@@ -299,7 +298,7 @@ export function CreativeDisciplines() {
             </p>
 
             {/* Media Window */}
-            <div className="relative w-full h-[220px] sm:h-[240px] overflow-hidden rounded-xl bg-[#30231D]/10">
+            <div className="relative w-full h-[195px] sm:h-[215px] overflow-hidden rounded-xl bg-[#30231D]/10">
               <video
                 src="/ringview/5.mp4"
                 poster="/ringview/5-poster.webp"
@@ -315,10 +314,10 @@ export function CreativeDisciplines() {
           {/* Card 3: UGC & Brand Content */}
           <div
             ref={card3Ref}
-            className="cd-mobile-card absolute top-0 left-0 right-0 w-full rounded-2xl bg-[#F3EADF] border border-[#30231D]/15 p-4 shadow-[0_16px_40px_-6px_rgba(48,35,29,0.24)] flex flex-col"
+            className="cd-mobile-card absolute top-0 left-0 right-0 w-full rounded-2xl bg-[#F3EADF] border border-[#30231D]/15 p-4 shadow-[0_18px_36px_-5px_rgba(48,35,29,0.24)] flex flex-col"
           >
             {/* Number and Title */}
-            <div className="flex items-baseline gap-2.5 pb-1">
+            <div className="cd-card-header flex items-baseline gap-2.5 pb-1">
               <span
                 className="text-[11.5px] font-medium tracking-[0.22em] text-[#B9784E] select-none"
                 style={{ fontFamily: '"DM Sans", system-ui, sans-serif' }}
@@ -327,7 +326,7 @@ export function CreativeDisciplines() {
               </span>
               <span className="text-[#30231D]/25 font-light select-none">/</span>
               <h3
-                className="text-[1.35rem] font-light text-[#30231D] tracking-tight leading-tight"
+                className="text-[1.3rem] sm:text-[1.35rem] font-light text-[#30231D] tracking-tight leading-tight"
                 style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}
               >
                 UGC & Brand Content
@@ -342,7 +341,7 @@ export function CreativeDisciplines() {
             </p>
 
             {/* Media Window */}
-            <div className="relative w-full h-[220px] sm:h-[240px] overflow-hidden rounded-xl bg-[#30231D]/10">
+            <div className="relative w-full h-[195px] sm:h-[215px] overflow-hidden rounded-xl bg-[#30231D]/10">
               <video
                 src="/ringview/7.mp4"
                 poster="/ringview/7-poster.webp"

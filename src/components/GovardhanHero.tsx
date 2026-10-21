@@ -473,9 +473,20 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
               </h5>
 
               {/* CTA: LET'S CREATE with signature inward flood fill */}
-              <button
-                type="button"
-                onClick={() => setConnectOpen(true)}
+              <a
+                href="#contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const contactEl = document.getElementById("contact");
+                  if (contactEl) {
+                    const prev = document.documentElement.style.scrollBehavior;
+                    document.documentElement.style.scrollBehavior = "auto";
+                    contactEl.scrollIntoView();
+                    document.documentElement.style.scrollBehavior = prev;
+                  } else {
+                    window.location.hash = "#contact";
+                  }
+                }}
                 onMouseEnter={handleCtaHoverStart}
                 onMouseLeave={handleCtaHoverEnd}
                 onFocus={handleCtaHoverStart}
@@ -487,7 +498,7 @@ export function GovardhanHero({ gridInView }: GovardhanHeroProps) {
                 }}
               >
                 <span>LET&apos;S CREATE</span>
-              </button>
+              </a>
             </motion.div>
           </div>
 
