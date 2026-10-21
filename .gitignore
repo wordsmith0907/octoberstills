@@ -48,6 +48,9 @@ SaveInta.com_*.mp4
 scratch/
 scripts/
 /data/
+recordings/
+octoberstills-proposal-screenshots/
+*.zip
 
 .vercel
 .env*

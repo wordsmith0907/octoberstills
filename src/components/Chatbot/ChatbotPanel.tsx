@@ -13,6 +13,7 @@ import {
 import { InquiryFormCard } from "./InquiryFormCard";
 import type { ChatMessage, ChatResponsePayload } from "../../lib/gemini-service";
 import type { InquirySubmissionPayload, InquiryResponse } from "../../lib/lead-storage";
+import { clearClientSessionCache } from "../../lib/client-cache";
 import {
   getActiveConversation,
   saveConversation,
@@ -408,6 +409,7 @@ export function ChatbotPanel({
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
     }
+    clearClientSessionCache();
     setStreamingReply(null);
     setShowClearConfirm(false);
     setIsLoading(true);

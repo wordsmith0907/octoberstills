@@ -4,6 +4,7 @@ import { ChatbotPanel } from "./ChatbotPanel";
 import { chatWithStudioAssistant, submitStudioInquiry } from "../../lib/server-fns";
 import type { ChatMessage, ChatResponsePayload } from "../../lib/gemini-service";
 import type { InquirySubmissionPayload, InquiryResponse } from "../../lib/lead-storage";
+import { getCachedClientResponse, setCachedClientResponse } from "../../lib/client-cache";
 
 interface StudioAssistantProps {
   visible?: boolean;
@@ -45,6 +46,22 @@ export function StudioAssistant({ visible = true }: StudioAssistantProps) {
         onChunk?: (text: string) => void;
       }
     ): Promise<ChatResponsePayload> => {
+      const lastUserMsg = messages.filter((m) => m.role === "user").pop()?.content || "";
+
+      // 0. Instant Browser Session Cache Hit (0ms latency, zero network overhead)
+      const cached = getCachedClientResponse(lastUserMsg);
+      if (cached) {
+        if (options?.onChunk) {
+          options.onChunk(cached.reply);
+        }
+        return {
+          reply: cached.reply,
+          suggestedActions: cached.suggestedActions,
+          detectedIntent: cached.detectedIntent,
+          path: "browser_session_cache",
+        };
+      }
+
       // 1. Primary: Streaming SSE endpoint /api/chat
       try {
         const res = await fetch("/api/chat", {
@@ -108,9 +125,25 @@ export function StudioAssistant({ visible = true }: StudioAssistantProps) {
           }
 
           if (finalResponse) {
+            if (!finalResponse.isFallback) {
+              setCachedClientResponse(
+                lastUserMsg,
+                finalResponse.reply,
+                finalResponse.suggestedActions,
+                finalResponse.detectedIntent,
+                false
+              );
+            }
             return finalResponse;
           }
           if (accumulatedReply.trim().length > 0) {
+            setCachedClientResponse(
+              lastUserMsg,
+              accumulatedReply.trim(),
+              ["Discuss a Project", "View Selected Work"],
+              undefined,
+              false
+            );
             return {
               reply: accumulatedReply.trim(),
               suggestedActions: ["Discuss a Project", "View Selected Work"],
@@ -122,6 +155,15 @@ export function StudioAssistant({ visible = true }: StudioAssistantProps) {
         if (res.ok && contentType.includes("application/json")) {
           const data = await res.json();
           if (data && data.reply) {
+            if (!data.isFallback) {
+              setCachedClientResponse(
+                lastUserMsg,
+                data.reply,
+                data.suggestedActions,
+                data.detectedIntent,
+                false
+              );
+            }
             return data;
           }
         }
@@ -147,6 +189,15 @@ export function StudioAssistant({ visible = true }: StudioAssistantProps) {
         if (res.ok) {
           const data = await res.json();
           if (data && data.reply) {
+            if (!data.isFallback) {
+              setCachedClientResponse(
+                lastUserMsg,
+                data.reply,
+                data.suggestedActions,
+                data.detectedIntent,
+                false
+              );
+            }
             return data;
           }
         }
@@ -166,6 +217,15 @@ export function StudioAssistant({ visible = true }: StudioAssistantProps) {
           },
         });
         if (rpcResult && rpcResult.reply) {
+          if (!rpcResult.isFallback) {
+            setCachedClientResponse(
+              lastUserMsg,
+              rpcResult.reply,
+              rpcResult.suggestedActions,
+              rpcResult.detectedIntent,
+              false
+            );
+          }
           return rpcResult;
         }
       } catch (rpcErr) {
